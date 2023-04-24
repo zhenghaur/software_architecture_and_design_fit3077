@@ -4,7 +4,6 @@ const Main = () => {
     return (
         <>
             <Menu link="/game"/>
-          
         </>
     )
 }
