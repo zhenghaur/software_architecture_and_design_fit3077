@@ -1,11 +1,7 @@
 plugins {
 	id 'java'
-	// add application plugin to allow output jar to be ran as an executable
-	id 'application'
 	id 'org.springframework.boot' version '3.0.6'
 	id 'io.spring.dependency-management' version '1.1.0'
-	// add shadow plugin (to make a uber/fat jar)
-	id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group = 'com.team8'
@@ -29,14 +25,4 @@ compileJava {
 	// Set release flag to 17. Always compile to java 17
 	// options.release = 17
 	options.release = 17
-}
-
-assemble {
-	// Convenience, always run shadowJar when making a jar
-	dependsOn(shadowJar)
-}
-
-application {
-	// Set mainclass attribute in jar manifest
-	mainClass = "com.team8.backend.BackendApplication"
 }
