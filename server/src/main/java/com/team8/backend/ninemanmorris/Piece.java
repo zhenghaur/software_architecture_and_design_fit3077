@@ -5,5 +5,8 @@ public class Piece {
 
     private Player player;
 
-    public Piece(){};
+    public Piece(Player player, Board board){
+        this.board = board;
+        this.player = player;
+    };
 }

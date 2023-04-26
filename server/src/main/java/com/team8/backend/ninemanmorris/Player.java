@@ -5,7 +5,11 @@ public class Player {
 
     private String playerName;
 
-    public Player(){};
+    public Player(String playerName){
+        this.playerName = playerName;
+    };
+
+    public void addPiece();
 
     public Move playTurn(){};
 }

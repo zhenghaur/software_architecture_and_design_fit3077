@@ -6,7 +6,10 @@ public class BasicMove extends Move {
 
     private Position destination;
 
-    public BasicMove(){};
+    public BasicMove(Piece target, Position destination){
+        this.target = target;
+        this.destination = destination;
+    };
 
     @Override
     public String execute(Player player, Board board){};

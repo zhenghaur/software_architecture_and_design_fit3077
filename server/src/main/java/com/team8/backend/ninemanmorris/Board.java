@@ -2,6 +2,8 @@ package com.team8.backend.ninemanmorris;
 
 public class Board {
 
+    private int boardId;
+
     private List<Position> positions = new ArrayList<>();
 
     private List<Piece> pieces = new ArrayList<>();
@@ -10,7 +12,11 @@ public class Board {
     
     private Map<Location, Piece> pieceOfPositions = new Hashmap<Location, Piece>();
 
-    public Board(){};
+    public Board(int boardId){
+        this.boardId = boardId;
+    };
+
+
 
     public void addPiece(Piece piece, Position position){};
 
