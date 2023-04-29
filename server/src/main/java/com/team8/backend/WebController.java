@@ -29,11 +29,7 @@ public class WebController {
     @Autowired
     private GameController gameController;
 
-    @GetMapping(value = "/boardstate/")
-    public String getCurrentBoardState(@RequestBody String json) {
-        return "hello world";
-    }
-
+    // API testing
     @GetMapping(value = "/greeting")
     public String getGreeting() {
         System.out.println("hey");
@@ -41,16 +37,6 @@ public class WebController {
     }
 
     @PostMapping(value = "/makemove")
-    public boolean makeMove(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<String, Object> map = objectMapper.readValue(json, HashMap.class);
-        System.out.println(map.get("board"));
-        System.out.println(map.get("board").getClass());
-        System.out.println(((ArrayList<ArrayList<Integer>>) map.get("board")).get(1));
-        return true;
-    }
-
-    @PostMapping(value = "/testmove")
     public boolean testMove(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
         // JSON parser
         ObjectMapper objectMapper = new ObjectMapper();
@@ -67,8 +53,6 @@ public class WebController {
 
         System.out.println(json);
         temporaryBoard.setBoardState((ArrayList<ArrayList<Integer>>) jsonObject.get("board"));
-
-        // System.out.println(gameController.getGame(gameId).makeMove(temporaryBoard));
 
         return gameController.getGame(gameId).makeMove(temporaryBoard);
     }

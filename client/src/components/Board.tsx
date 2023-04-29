@@ -76,7 +76,7 @@ const Board = () => {
 
     const handleMove = async(tempBoard: any) => {
         let validMove = false
-        const response = await fetch('http://localhost:9999/testmove', {
+        const response = await fetch('http://localhost:9999/makemove', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
