@@ -15,15 +15,25 @@ The Restful API the Client interacts with can be found in `server/src/main/java/
 The main Project files for Nine Man Morris can be found in `server/src/main/java/com/team8/backend/ninemanmorris`
 <br>
 
-# Start Frontend
-`cd client` <br>
-`npm install` <br>
-`npm run dev` <br>
-
 # Start Backend
+`navigate to root`<br>
 `cd server` <br>
 `./gradlew build` <br>
 `java -jar build/libs/backend-0.0.1-SNAPSHOT.jar` <br>
+
+# Start Frontend
+`navigate to root`<br>
+`cd client` <br>
+`npm install` <br>
+`npm run dev` <br>
+Visit the link <br>
+
+# Instructions & Important to note
+1) Advised to start the Backend before the Frontend, as the population of the FE relies on the BE data <br>
+2) To move, click, hold, drag and drop the pieces on the board display <br>
+3) White player goes first <br>
+4) The Backend is hosted on port 9999, and enables cors from all sources <br>
+5) Advised to run FE & BE on seperate shell instances
 
 ## Project ##
 Currently, the board initially starts with 9 pieces, 5 white 4 black. <br>
