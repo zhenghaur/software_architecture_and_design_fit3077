@@ -1,0 +1,26 @@
+.article-board {
+    /* width: 60vw;
+    height: 3rem; */
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    
+}
+
+.article-player-container {
+    margin: 1rem;
+}
+
+.ariticle-board-container {
+    border: 1px solid black;
+}
+
+.section-board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-direction: column;
+
+    height: 100vh;
+}
+

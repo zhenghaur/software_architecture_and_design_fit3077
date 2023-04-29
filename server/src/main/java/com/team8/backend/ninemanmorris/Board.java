@@ -7,21 +7,21 @@ public class Board {
     private Position[] positions = new Position[24];
 
     private Position[][] rows = new Position[8];
-    
+
     private Position[][] cols = new Position[8];
 
     private List<Piece> pieces = new ArrayList<>();
 
     private Map<Piece, Location> positionOfPieces = new Hashmap<Piece, Location>();
-    
+
     private Map<Location, Piece> pieceOfPositions = new Hashmap<Location, Piece>();
 
-    public Board(int boardId){
+    public Board(int boardId) {
         this.boardId = boardId;
         this.initPosition();
     };
 
-    private void initPosition(){
+    private void initPosition() {
         position[0] = new Position(0, 0, this);
         position[1] = new Position(0, 3, this);
         position[2] = new Position(0, 6, this);
@@ -47,34 +47,39 @@ public class Board {
         position[22] = new Position(6, 3, this);
         position[23] = new Position(6, 6, this);
 
-        rows[0] = {position[0], position[1], position[2]};
-        rows[1] = {position[3], position[4], position[5]};
-        rows[2] = {position[6], position[7], position[8]};
-        rows[3] = {position[9], position[10], position[11]};
-        rows[4] = {position[12], position[13], position[14]};
-        rows[5] = {position[15], position[16], position[17]};
-        rows[6] = {position[18], position[19], position[20]};
-        rows[7] = {position[21], position[22], position[23]};
+        rows[0]={position[0],position[1],position[2]};
+        rows[1]={position[3],position[4],position[5]};
+        rows[2]={position[6],position[7],position[8]};
+        rows[3]={position[9],position[10],position[11]};
+        rows[4]={position[12],position[13],position[14]};
+        rows[5]={position[15],position[16],position[17]};
+        rows[6]={position[18],position[19],position[20]};
+        rows[7]={position[21],position[22],position[23]};
 
-        cols[0] = {position[0], position[9], position[21]};
-        cols[1] = {position[3], position[16], position[18]};
-        cols[2] = {position[6], position[11], position[15]};
-        cols[3] = {position[1], position[4], position[7]};
-        cols[4] = {position[16], position[19], position[22]};
-        cols[5] = {position[8], position[12], position[17]};
-        cols[6] = {position[5], position[13], position[20]};
-        cols[7] = {position[2], position[14], position[23]};
+        cols[0]={position[0],position[9],position[21]};
+        cols[1]={position[3],position[16],position[18]};
+        cols[2]={position[6],position[11],position[15]};
+        cols[3]={position[1],position[4],position[7]};
+        cols[4]={position[16],position[19],position[22]};
+        cols[5]={position[8],position[12],position[17]};
+        cols[6]={position[5],position[13],position[20]};
+        cols[7]={position[2],position[14],position[23]};
 
     };
 
-    public void addPiece(Piece piece, Position position){};
+    public void addPiece(Piece piece, Position position) {
+    };
 
-    public void removePiece(Position position){};
+    public void removePiece(Position position) {
+    };
 
-    public void movePiece(Position oldPosition, Position newPosition){};
+    public void movePiece(Position oldPosition, Position newPosition) {
+    };
 
-    public bool isPositionEmpty(Position position){};
+    public boolean isPositionEmpty(Position position) {
+    };
 
-    public Piece getPiece(Position position){};
+    public Piece getPiece(Position position) {
+    };
 
 }

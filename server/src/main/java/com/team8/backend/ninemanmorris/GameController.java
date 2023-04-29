@@ -1,5 +1,7 @@
 package com.team8.backend.ninemanmorris;
 
+import java.util.ArrayList;
+
 public class GameController {
     int id;
 
