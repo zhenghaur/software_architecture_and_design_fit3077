@@ -1,7 +1,7 @@
 package com.team8.backend.ninemanmorris;
 
 public class Position {
-    
+
     private List<Position> neighbors = new ArrayList<>();
 
     private Board board;
@@ -16,9 +16,17 @@ public class Position {
         this.board = board;
     };
 
-    public void addNeighbors(List<Position> neighbors){};
+    public void addNeighbors(Position[] newNeighbors){
+        for (Position neighbor: newNeighbors){
+            this.neighbors.add(neighbor)
+        }
+    };
 
-    public int getRow(){};
+    public int getRow(){
+        return this.row;
+    };
 
-    public int getCol(){};
+    public int getCol(){
+        return this.col;
+    };
 }

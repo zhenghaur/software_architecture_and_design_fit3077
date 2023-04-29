@@ -76,7 +76,7 @@ public class Board {
     public void movePiece(Position oldPosition, Position newPosition) {
     };
 
-    public boolean isPositionEmpty(Position position) {
+    public bool isPositionEmpty(Position position) {
     };
 
     public Piece getPiece(Position position) {
