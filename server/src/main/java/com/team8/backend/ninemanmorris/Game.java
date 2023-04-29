@@ -16,6 +16,14 @@ public class Game {
         this.currPlayer = playerOne;
     }
 
+    public Player getCurrPlayer() {
+        return this.currPlayer;
+    }
+
+    public void setCurrPlayer(Player player) {
+        this.currPlayer = player;
+    }
+
     public boolean validateMove(Board newBoard) {
         boolean isValid = false;
         ArrayList<ArrayList<Integer>> currBoardState = this.board.getBoardState();
@@ -40,4 +48,17 @@ public class Game {
         }
         return isValid;
     }
+
+    public void makeMove(Board newBoard) {
+        if (this.validateMove(newBoard)) {
+            this.board = newBoard;
+            // Swap player turns
+            if (this.getCurrPlayer() == this.playerOne) {
+                this.setCurrPlayer(this.playerTwo);
+            } else if (this.getCurrPlayer() == this.playerTwo) {
+                this.setCurrPlayer(this.playerOne);
+            }
+        }
+    }
+
 }
