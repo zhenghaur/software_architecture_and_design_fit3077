@@ -25,8 +25,13 @@ public class Game {
                 // Check current row if there is difference
                 for (int j = 0; j < currBoardState.get(i).size(); j++) {
                     if (currBoardState.get(i).get(j) != newBoardState.get(i).get(j)) {
-                        // Validate the change if spot is not unavailable, and move is made by current player
-                        if (currBoardState.get(i).get(j) == 1 && newBoardState.get(i).get(j) == this.currPlayer.getPlayerToken()) {
+                        // Validate the change if spot is not unavailable, and move is made by current
+                        // player
+                        if (currBoardState.get(i).get(j) == 1
+                                && newBoardState.get(i).get(j) == this.currPlayer.getPlayerToken()) {
+                            isValid = true;
+                        } else if (currBoardState.get(i).get(j) == this.currPlayer.getPlayerToken()
+                                && newBoardState.get(i).get(j) == 1) {
                             isValid = true;
                         }
                     }
