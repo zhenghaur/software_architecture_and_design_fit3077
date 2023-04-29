@@ -4,6 +4,7 @@ import Tile from "./Tile"
 
 
 const Board = () => {
+    const [gameId, setGameId] = useState(0);
     const [boardState, setBoardState] = useState<number[][]>([]);
     const [playerTurn, setPlayerTurn] = useState(1) // By default set to 1 unless changed
     const [selectedPiece, setSelectedPiece] = useState<{ row: number, col: number } | null>(null)
@@ -12,27 +13,29 @@ const Board = () => {
         // Get Board from Backend
         try {
             // Default board in case backend is not online
-            const board =  [[1,0,0,2,0,0,1],
-                            [0,1,0,1,0,1,0],
-                            [0,0,1,1,3,0,0],
-                            [1,1,1,0,1,1,1],
+            const board =  [[1,0,0,2,0,0,3],
+                            [0,2,0,1,0,1,0],
                             [0,0,1,1,1,0,0],
-                            [0,1,0,1,0,1,0],
-                            [1,0,0,1,0,0,1],]
-            console.log("reach")                            
-            const response = await fetch('http://localhost:9999/boardstate/', {
+                            [1,1,1,0,1,3,1],
+                            [0,0,3,1,1,0,0],
+                            [0,2,0,3,0,2,0],
+                            [2,0,0,1,0,0,1],]
+            // Attempts to populate board                          
+            const response = await fetch('http://localhost:9999/initgame', {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json'
                 },
-            }).catch(error => console.log(error));
-            console.log("reach2") 
-            
+            })
+
             //if backend is not online
             if (!response) {
                 setBoardState(board)
             } else {
-                // setBoardState(response.body!["board"])
+                const json = await response.json();
+                // setBoardState(json.board)
+                setGameId(json.game_id)
+                setBoardState(json.board.boardState)
             }
         } catch (error) {
         }
@@ -60,11 +63,35 @@ const Board = () => {
             // Make the fetch request and wait for status
             // Should return false if not players turn
             // if placed on not good piece
-            
-            playerHelper()
-            setBoardState(tempBoard)
+            if (await handleMove(tempBoard)) {
+                playerHelper()
+                setBoardState(tempBoard)
+            }
+            else {
+                alert("Invalid Move")
+            }
         }
         setSelectedPiece(null)
+    }
+
+    const handleMove = async(tempBoard: any) => {
+        let validMove = false
+        const response = await fetch('http://localhost:9999/testmove', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "board": tempBoard,
+                "game_id": gameId
+            })
+        })
+        if (response.ok) {
+            validMove = await response.json();
+        } else {
+            console.log("Error:", response.statusText);
+        }
+        return(validMove)
     }
 
     const playerHelper = () => {
@@ -87,7 +114,7 @@ const Board = () => {
         </article>
         <article className="ariticle-board-container">
             {boardState.map((row, rowIndex) => {
-                return (<div>
+                return (<div key={rowIndex}>
                     <div className="article-board" >{row.map((col, colIndex) => {
                         return(
                             <div 

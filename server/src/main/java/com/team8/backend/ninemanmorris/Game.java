@@ -16,6 +16,14 @@ public class Game {
         this.currPlayer = playerOne;
     }
 
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     public Player getCurrPlayer() {
         return this.currPlayer;
     }
@@ -24,7 +32,7 @@ public class Game {
         this.currPlayer = player;
     }
 
-    public boolean validateMove(Board newBoard) {
+    private boolean validateMove(Board newBoard) {
         boolean isValid = false;
         ArrayList<ArrayList<Integer>> currBoardState = this.board.getBoardState();
         ArrayList<ArrayList<Integer>> newBoardState = newBoard.getBoardState();
@@ -35,11 +43,23 @@ public class Game {
                     if (currBoardState.get(i).get(j) != newBoardState.get(i).get(j)) {
                         // Validate the change if spot is not unavailable, and move is made by current
                         // player
+                        if ((currBoardState.get(i).get(j) != 1)
+                                && (newBoardState.get(i).get(j) == this.playerOne.getPlayerToken()
+                                        || newBoardState.get(i).get(j) == this.playerTwo.getPlayerToken())) {
+                            System.out.println("REACHED FALSE");
+                            return false;
+                        }
                         if (currBoardState.get(i).get(j) == 1
                                 && newBoardState.get(i).get(j) == this.currPlayer.getPlayerToken()) {
+                            System.out.print("RECAHCES");
                             isValid = true;
                         } else if (currBoardState.get(i).get(j) == this.currPlayer.getPlayerToken()
                                 && newBoardState.get(i).get(j) == 1) {
+                            System.out.println("RECAHES SECOND");
+                            System.out.println(currBoardState.get(i).get(j));
+                            System.out.println(newBoardState.get(i).get(j));
+                            System.out.println(this.playerOne.getPlayerToken());
+                            System.out.println(this.playerTwo.getPlayerToken());
                             isValid = true;
                         }
                     }
@@ -49,9 +69,12 @@ public class Game {
         return isValid;
     }
 
-    public void makeMove(Board newBoard) {
-        if (this.validateMove(newBoard)) {
-            this.board = newBoard;
+    public boolean makeMove(Board newBoard) {
+        Boolean isValid = false;
+        isValid = this.validateMove(newBoard);
+
+        if (isValid) {
+            setBoard(newBoard);
             // Swap player turns
             if (this.getCurrPlayer() == this.playerOne) {
                 this.setCurrPlayer(this.playerTwo);
@@ -59,6 +82,8 @@ public class Game {
                 this.setCurrPlayer(this.playerOne);
             }
         }
+
+        return isValid;
     }
 
 }
