@@ -24,3 +24,7 @@ The main Project files for Nine Man Morris can be found in `server/src/main/java
 `cd server` <br>
 `./gradlew build` <br>
 `java -jar build/libs/backend-0.0.1-SNAPSHOT.jar` <br>
+
+## Project ##
+Currently, the board initially starts with 9 pieces, 5 white 4 black. <br>
+<img src="./client/public/first.PNG">
