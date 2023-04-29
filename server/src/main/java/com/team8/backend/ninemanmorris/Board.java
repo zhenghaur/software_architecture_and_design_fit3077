@@ -53,7 +53,11 @@ public class Board {
 
         this.boardState = newBoard;
 
-    } 
+    }
+
+    public void setBoardState(ArrayList<ArrayList<Integer>> newBoardState) {
+        this.boardState = newBoardState;
+    }
 
     public ArrayList<ArrayList<Integer>> getBoardState() {
         return this.boardState;
