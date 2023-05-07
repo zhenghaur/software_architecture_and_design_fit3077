@@ -15,6 +15,17 @@ The Restful API the Client interacts with can be found in `server/src/main/java/
 The main Project files for Nine Man Morris can be found in `server/src/main/java/com/team8/backend/ninemanmorris`
 <br>
 
+*Running With Docker*
+# Docker
+`docker-compose up`
+
+# Docker (Manual)
+`docker build -t 9mm-backend:0.0.1 .`
+`docker build -t 9mm-frontend:0.0.1 .`
+`docker run -it  -p5173:5173 frontend-image-id`
+`docker run -it  -p9999:9999 backend-image-id`
+
+*If you want to run manually* 
 # Start Backend
 `navigate to root`<br>
 `cd server` <br>

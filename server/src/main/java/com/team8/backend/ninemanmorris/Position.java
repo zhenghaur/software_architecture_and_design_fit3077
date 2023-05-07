@@ -7,29 +7,28 @@ public class Position {
 
     private List<Position> neighbors = new ArrayList<>();
 
-    private Board board;
+    // private Board board;
 
     private int row;
 
     private int col;
 
-    public Position(int row, int col, Board board){
+    public Position(int row, int col) {
         this.row = row;
         this.col = col;
-        this.board = board;
     };
 
-    public void addNeighbors(Position[] newNeighbors){
-        for (Position neighbor: newNeighbors){
+    public void addNeighbors(Position[] newNeighbors) {
+        for (Position neighbor : newNeighbors) {
             this.neighbors.add(neighbor);
         }
     };
 
-    public int getRow(){
+    public int getRow() {
         return this.row;
     };
 
-    public int getCol(){
+    public int getCol() {
         return this.col;
     };
 }
