@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Board {
 
-    private ArrayList<ArrayList<Integer>> boardState;
+    Position[][] boardState = new Position[7][7];
 
     // private Position[] positions = new Position[24];
 
@@ -22,55 +22,98 @@ public class Board {
     // private Map<Position, Piece> pieceOfPositions = new Hashmap<Position,
     // Piece>();
 
-    public Board() {
-        this.initBoard();
+    /***
+     * 
+     * @param newBoard Matrix of ints representing the defualt board state
+     */
+    public Board(ArrayList<ArrayList<Integer>> newBoard) {
+        // this.initBoard();
+        this.setBoardState(newBoard);
     };
 
-    private void initBoard() {
-        ArrayList<ArrayList<Integer>> newBoard = new ArrayList<>();
+    /***
+     * Board Builder with position population and piece
+     * 
+     * @param newBoard
+     */
+    private void initBoard(ArrayList<ArrayList<Integer>> newBoard) {
+        for (int row = 0; row < newBoard.size(); row++) {
+            for (int col = 0; col < newBoard.get(row).size(); col++) {
+                Position tempPosition = new Position(row, col);
 
-        // Initializing board with default starting values
-        for (int i = 0; i < 7; i++) {
-            newBoard.add(new ArrayList<Integer>());
-        }
-
-        // int[] row1 = { 1, 0, 0, 1, 0, 0, 1 }; // Actual defualt board
-        // int[] row2 = { 0, 1, 0, 1, 0, 1, 0 };
-        // int[] row3 = { 0, 0, 1, 1, 1, 0, 0 };
-        // int[] row4 = { 1, 1, 1, 0, 1, 1, 1 };
-        // int[] row5 = { 0, 0, 1, 1, 1, 0, 0 };
-        // int[] row6 = { 0, 1, 0, 1, 0, 1, 0 };
-        // int[] row7 = { 1, 0, 0, 1, 0, 0, 1 };
-
-        int[] row1 = { 1, 0, 0, 2, 0, 0, 3 }; // Initialised with test pieces
-        int[] row2 = { 0, 2, 0, 1, 0, 1, 0 };
-        int[] row3 = { 0, 0, 1, 1, 1, 0, 0 };
-        int[] row4 = { 1, 1, 1, 0, 1, 3, 1 };
-        int[] row5 = { 0, 0, 3, 1, 1, 0, 0 };
-        int[] row6 = { 0, 2, 0, 3, 0, 2, 0 };
-        int[] row7 = { 2, 0, 0, 1, 0, 0, 1 };
-
-        int[][] rows = { row1, row2, row3, row4, row5, row6, row7 };
-
-        int rowCount = 0;
-        for (ArrayList<Integer> row : newBoard) {
-            for (int i = 0; i < 7; i++) {
-                row.add(rows[rowCount][i]);
+                if (newBoard.get(row).get(col) == Token.EMPTY.getToken()) {
+                    this.boardState[row][col] = tempPosition;
+                }
+                if (newBoard.get(row).get(col) == Token.TILE.getToken()) {
+                    this.boardState[row][col] = tempPosition;
+                }
+                if (newBoard.get(row).get(col) == Token.PLAYER_1.getToken()) {
+                    this.boardState[row][col] = tempPosition;
+                }
+                if (newBoard.get(row).get(col) == Token.PLAYER_2.getToken()) {
+                    this.boardState[row][col] = tempPosition;
+                }
             }
-            rowCount++;
+        }
+    }
+
+    // Find difference Between 2 different board states
+
+    public boolean equals(Board boardToCompare) {
+        Boolean returnFlag = false;
+
+        for (int row = 0; row < boardToCompare.getBoardState().length; row++) {
+
         }
 
-        this.boardState = newBoard;
-
+        return returnFlag;
     }
 
-    public void setBoardState(ArrayList<ArrayList<Integer>> object) {
-        this.boardState = object;
+    public void setBoardState(ArrayList<ArrayList<Integer>> newBoard) {
+        this.initBoard(newBoard);
     }
 
-    public ArrayList<ArrayList<Integer>> getBoardState() {
+    public Position[][] getBoardState() {
         return this.boardState;
     }
+
+    // private void initBoard() {
+    // ArrayList<ArrayList<Integer>> newBoard = new ArrayList<>();
+
+    // // Initializing board with default starting values
+    // for (int i = 0; i < 7; i++) {
+    // newBoard.add(new ArrayList<Integer>());
+    // }
+
+    // // int[] row1 = { 1, 0, 0, 1, 0, 0, 1 }; // Actual defualt board
+    // // int[] row2 = { 0, 1, 0, 1, 0, 1, 0 };
+    // // int[] row3 = { 0, 0, 1, 1, 1, 0, 0 };
+    // // int[] row4 = { 1, 1, 1, 0, 1, 1, 1 };
+    // // int[] row5 = { 0, 0, 1, 1, 1, 0, 0 };
+    // // int[] row6 = { 0, 1, 0, 1, 0, 1, 0 };
+    // // int[] row7 = { 1, 0, 0, 1, 0, 0, 1 };
+
+    // int[] row1 = { 1, 0, 0, 2, 0, 0, 3 }; // Initialised with test pieces
+    // int[] row2 = { 0, 2, 0, 1, 0, 1, 0 };
+    // int[] row3 = { 0, 0, 1, 1, 1, 0, 0 };
+    // int[] row4 = { 1, 1, 1, 0, 1, 3, 1 };
+    // int[] row5 = { 0, 0, 3, 1, 1, 0, 0 };
+    // int[] row6 = { 0, 2, 0, 3, 0, 2, 0 };
+    // int[] row7 = { 2, 0, 0, 1, 0, 0, 1 };
+
+    // int[][] rows = { row1, row2, row3, row4, row5, row6, row7 };
+
+    // int rowCount = 0;
+    // for (ArrayList<Integer> row : newBoard) {
+    // for (int i = 0; i < 7; i++) {
+    // row.add(rows[rowCount][i]);
+    // }
+    // rowCount++;
+    // }
+
+    // this.boardState = newBoard;
+
+    // }
 
     // private void initPosition(){
     // positions[0] = new Position(0, 0, this);
