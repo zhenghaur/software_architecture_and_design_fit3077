@@ -2,11 +2,15 @@ package com.team8.backend.ninemanmorris;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("JHE");
+        GameController gameController = new GameController();
+        int gameId = gameController.createGame();
+        gameController.getBoard(gameId).printBoard();
+        System.out.println(gameController.getBoard(gameId).getBoardStateInt());
 
-        Board board = new Board();
-        for (int i = 0; i < board.getBoardState().size(); i++) {
-            System.out.println(board.getBoardState().get(i));
-        }
+        // Game game = new Game();
+        // game.getBoard().printBoard();
+        // game.getBoard().makeMove(0, 3, 0, 0);
+        // System.out.println(" ");
+        // game.getBoard().printBoard();
     }
 }

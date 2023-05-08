@@ -43,18 +43,13 @@ public class WebController {
         HashMap<String, Object> jsonObject = objectMapper.readValue(json, new TypeReference<HashMap<String, Object>>() {
         });
 
-        // Values for attempting the move
-        Board temporaryBoard = new Board();
-        temporaryBoard.setBoardState((ArrayList<ArrayList<Integer>>) jsonObject.get("board"));
+        int original_row = (int) jsonObject.get("original_row");
+        int original_col = (int) jsonObject.get("original_col");
+        int movement_row = (int) jsonObject.get("movement_row");
+        int movement_col = (int) jsonObject.get("movement_col");
         int gameId = (int) jsonObject.get("game_id");
 
-        System.out.println(jsonObject.get("board").getClass());
-        System.out.println(jsonObject.get("game_id"));
-
-        System.out.println(json);
-        temporaryBoard.setBoardState((ArrayList<ArrayList<Integer>>) jsonObject.get("board"));
-
-        return gameController.getGame(gameId).makeMove(temporaryBoard);
+        return gameController.getGame(gameId).makeMove(original_row, original_col, movement_row, movement_col);
     }
 
     /***
@@ -70,13 +65,13 @@ public class WebController {
     @CrossOrigin
     @GetMapping(value = "/initgame")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> makeGame() {
+    public ResponseEntity<Map<String, Object>> initGame() {
         // Output Json initialising
         Map<String, Object> responseMap = new HashMap<>();
 
         int gameId = gameController.createGame();
 
-        responseMap.put("board", gameController.getGame(gameId).getBoard());
+        responseMap.put("board", gameController.getGame(gameId).getBoard().getBoardStateInt());
         responseMap.put("game_id", gameId);
         return ResponseEntity.ok(responseMap);
     }

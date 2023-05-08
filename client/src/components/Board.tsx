@@ -35,7 +35,8 @@ const Board = () => {
                 const json = await response.json();
                 // setBoardState(json.board)
                 setGameId(json.game_id)
-                setBoardState(json.board.boardState)
+                // setBoardState(json.board.boardState)
+                setBoardState(json.board)
             }
         } catch (error) {
         }
@@ -58,12 +59,13 @@ const Board = () => {
             // Creates a new temporary board dep copy
             const tempBoard = JSON.parse(JSON.stringify(boardState))
             tempBoard[row][col] = tempBoard[fromRow][fromCol]
+            // Assumption previous checks are all correct
             tempBoard[fromRow][fromCol] = 1
-    
+            
             // Make the fetch request and wait for status
             // Should return false if not players turn
             // if placed on not good piece
-            if (await handleMove(tempBoard)) {
+            if (await handleMove(tempBoard, [fromRow, fromCol], [row, col])) {
                 playerHelper()
                 setBoardState(tempBoard)
             }
@@ -74,7 +76,7 @@ const Board = () => {
         setSelectedPiece(null)
     }
 
-    const handleMove = async(tempBoard: any) => {
+    const handleMove = async(tempBoard: any, originalPosition: Array<Number>, movementPosition: Array<Number>) => {
         let validMove = false
         const response = await fetch('http://localhost:9999/makemove', {
             method: 'POST',
@@ -83,7 +85,11 @@ const Board = () => {
             },
             body: JSON.stringify({
                 "board": tempBoard,
-                "game_id": gameId
+                "game_id": gameId,
+                "original_row": originalPosition[0],
+                "original_col": originalPosition[1],
+                "movement_row": movementPosition[0],
+                "movement_col": movementPosition[1],
             })
         })
         if (response.ok) {
