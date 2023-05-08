@@ -20,10 +20,10 @@ The main Project files for Nine Man Morris can be found in `server/src/main/java
 `docker-compose up`
 
 # Docker (Manual)
-`docker build -t 9mm-backend:0.0.1 .`
-`docker build -t 9mm-frontend:0.0.1 .`
-`docker run -it  -p5173:5173 frontend-image-id`
-`docker run -it  -p9999:9999 backend-image-id`
+`docker build -t 9mm-backend:0.0.1 .` <br>
+`docker build -t 9mm-frontend:0.0.1 .` <br>
+`docker run -it  -p5173:5173 frontend-image-id` <br>
+`docker run -it  -p9999:9999 backend-image-id` <br>
 
 *If you want to run manually* 
 # Start Backend
