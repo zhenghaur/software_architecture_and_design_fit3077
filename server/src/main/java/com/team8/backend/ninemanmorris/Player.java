@@ -9,14 +9,14 @@ public class Player {
     private List<Piece> pieces = new ArrayList<>();
 
     private String playerName;
-    private int playerToken;
+    private Token playerToken;
 
-    public Player(String playerName, int playerToken){
+    public Player(String playerName, Token playerToken) {
         this.playerName = playerName;
         this.playerToken = playerToken;
     }
 
-    public int getPlayerToken() {
+    public Token getPlayerToken() {
         return this.playerToken;
     }
 

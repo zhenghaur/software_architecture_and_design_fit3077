@@ -21,8 +21,8 @@ public class Game {
         };
 
         this.board = new Board(initialBoard);
-        this.playerOne = new Player("Player 1", 2);
-        this.playerTwo = new Player("Player 2", 3);
+        this.playerOne = new Player("Player 1", Token.PLAYER_1);
+        this.playerTwo = new Player("Player 2", Token.PLAYER_2);
         this.currPlayer = playerOne;
     }
 

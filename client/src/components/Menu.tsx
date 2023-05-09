@@ -1,16 +1,34 @@
 import { Link } from "react-router-dom"
 import "./Menu.css"
+import { useEffect, useState } from "react";
 
 interface MenuProp {
     link: string;
 }
 
 const Menu = (props: MenuProp) => {
+    const [gameId, setGameId] = useState(0);
+
+    const initialiseGame = async () => {
+        const response = await fetch('http://localhost:9999/initgame', {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+        })
+        const json = await response.json();
+        setGameId(Number(json.game_id))
+    }
+
+    useEffect(() => {
+        initialiseGame()
+      }, []);
+    
     return (
         <section className="section-menu">
             <h1> Nine Man Morris </h1>
             <ul>
-                <Link className="link-left-navbar" to={props.link}>
+                <Link className="link-left-navbar" to={`${props.link}/${gameId}`}>
                     <li>Start Game</li>
                 </Link>
             </ul>

@@ -1,5 +1,6 @@
 package com.team8.backend;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,11 +38,12 @@ public class WebController {
     }
 
     @PostMapping(value = "/makemove")
-    public boolean testMove(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
+    public boolean makeMove(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
         // JSON parser
         ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<String, Object> jsonObject = objectMapper.readValue(json, new TypeReference<HashMap<String, Object>>() {
-        });
+        HashMap<String, Integer> jsonObject = objectMapper.readValue(json,
+                new TypeReference<HashMap<String, Integer>>() {
+                });
 
         int original_row = (int) jsonObject.get("original_row");
         int original_col = (int) jsonObject.get("original_col");
@@ -73,6 +75,26 @@ public class WebController {
 
         responseMap.put("board", gameController.getGame(gameId).getBoard().getBoardStateInt());
         responseMap.put("game_id", gameId);
+        return ResponseEntity.ok(responseMap);
+    }
+
+    @CrossOrigin
+    @PostMapping(value = "/initfromid")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> initFromId(@RequestBody String json)
+            throws JsonMappingException, JsonProcessingException {
+        // Output Json initialising
+        Map<String, Object> responseMap = new HashMap<>();
+        // JSON parser
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, Object> jsonObject = objectMapper.readValue(json, new TypeReference<HashMap<String, Object>>() {
+        });
+
+        int gameId = (int) jsonObject.get("game_id");
+
+        responseMap.put("board", gameController.getGame(gameId).getBoard().getBoardStateInt());
+        responseMap.put("player", gameController.getGame(gameId).getCurrPlayer().getPlayerToken().getToken());
+
         return ResponseEntity.ok(responseMap);
     }
 }
