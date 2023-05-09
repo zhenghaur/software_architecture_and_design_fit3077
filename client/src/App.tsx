@@ -9,7 +9,7 @@ const router = createBrowserRouter(
       {/* <Route index element={<Home />}/> */}
       <Route index element={<Main />} />
       <Route path="menu" element={<Main />}/>
-      <Route path="game" element={<Game />}/>
+      <Route path="game/:gameId" element={<Game />}/>
     </Route>), {
       basename: ""
     }

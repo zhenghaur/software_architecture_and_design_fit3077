@@ -1,14 +1,25 @@
 import { useState, useEffect } from "react"
 import "./Board.css"
 import Tile from "./Tile"
+import { useParams } from "react-router-dom";
+
+interface GameData {
+    gameId: number,
+    boardState: number[][],
+    playerTurn: number,
+}
 
 
 const Board = () => {
-    const [gameId, setGameId] = useState(0);
+    // const [gameId, setGameId] = useState(0);
     const [boardState, setBoardState] = useState<number[][]>([]);
     const [playerTurn, setPlayerTurn] = useState(1) // By default set to 1 unless changed
+
+    // Piece for movement
     const [selectedPiece, setSelectedPiece] = useState<{ row: number, col: number } | null>(null)
 
+    const { gameId } = useParams(); // This is for identification of the game 
+    
     const initialiseStates = async () => {
         // Get Board from Backend
         try {
@@ -21,11 +32,14 @@ const Board = () => {
                             [0,2,0,3,0,2,0],
                             [2,0,0,1,0,0,1],]
             // Attempts to populate board                          
-            const response = await fetch('http://localhost:9999/initgame', {
-                method: 'GET',
+            const response = await fetch('http://localhost:9999/initfromid', {
+                method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({
+                    "game_id": Number(gameId),
+                })
             })
 
             //if backend is not online
@@ -33,10 +47,8 @@ const Board = () => {
                 setBoardState(board)
             } else {
                 const json = await response.json();
-                // setBoardState(json.board)
-                setGameId(json.game_id)
-                // setBoardState(json.board.boardState)
                 setBoardState(json.board)
+                setPlayerTurn(Number(json.player) - 1)
             }
         } catch (error) {
         }
@@ -65,7 +77,7 @@ const Board = () => {
             // Make the fetch request and wait for status
             // Should return false if not players turn
             // if placed on not good piece
-            if (await handleMove(tempBoard, [fromRow, fromCol], [row, col])) {
+            if (await handleMove([fromRow, fromCol], [row, col])) {
                 playerHelper()
                 setBoardState(tempBoard)
             }
@@ -76,7 +88,14 @@ const Board = () => {
         setSelectedPiece(null)
     }
 
-    const handleMove = async(tempBoard: any, originalPosition: Array<Number>, movementPosition: Array<Number>) => {
+    const handleMove = async(originalPosition: Array<Number>, movementPosition: Array<Number>) => {
+        console.log("FIRST")
+        console.log(originalPosition[0])
+        console.log(originalPosition[1])
+        console.log("SECOND")
+        console.log(movementPosition[0])
+        console.log(movementPosition[1])
+
         let validMove = false
         const response = await fetch('http://localhost:9999/makemove', {
             method: 'POST',
@@ -84,14 +103,15 @@ const Board = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "board": tempBoard,
-                "game_id": gameId,
-                "original_row": originalPosition[0],
-                "original_col": originalPosition[1],
-                "movement_row": movementPosition[0],
-                "movement_col": movementPosition[1],
+                "original_row": Number(originalPosition[0]),
+                "original_col": Number(originalPosition[1]),
+                "movement_row": Number(movementPosition[0]),
+                "movement_col": Number(movementPosition[1]),
+                "game_id": gameId
             })
         })
+        console.log("HHEHEHE")
+        console.log(response.ok)
         if (response.ok) {
             validMove = await response.json();
         } else {
