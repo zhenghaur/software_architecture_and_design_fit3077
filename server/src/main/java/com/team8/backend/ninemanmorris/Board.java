@@ -130,6 +130,15 @@ public class Board {
         return this.boardState;
     }
 
+    /**
+     * Getter for PublicPositions
+     * 
+     * @return
+     */
+    public ArrayList<PublicPosition> getPublicPositions() {
+        return this.publicPositions;
+    }
+
     /***
      * Obtains the token @ an input row, col coordinate
      * 
@@ -149,7 +158,7 @@ public class Board {
      * @param toRow   - row index of to
      * @param toCol   - col index of to
      */
-    public void makeMove(int fromRow, int fromCol, int toRow, int toCol) {
+    public void makeMoveSlide(int fromRow, int fromCol, int toRow, int toCol) {
         Token fromToken = this.getTokenAtCoord(fromRow, fromCol);
         for (PublicPosition position : this.publicPositions) {
             if (position.getRowIndex() == fromRow & position.getColIndex() == fromCol) {
@@ -160,6 +169,39 @@ public class Board {
                 } else if (fromToken == Token.PLAYER_2) {
                     position.setPlayerTwo();
                 }
+            }
+        }
+    }
+
+    /**
+     * Overload for the case of placing a token at a location
+     * 
+     * @param row         - row index to be placed
+     * @param col         - col index to be placed
+     * @param playerToken - player token to be placed
+     */
+    public void makeMovePlace(int row, int col, Token playerToken) {
+        for (PublicPosition position : this.publicPositions) {
+            if (position.getRowIndex() == row && position.getColIndex() == col) {
+                if (playerToken == Token.PLAYER_1) {
+                    position.setPlayerOne();
+                } else if (playerToken == Token.PLAYER_2) {
+                    position.setPlayerTwo();
+                }
+            }
+        }
+    }
+
+    /**
+     * Overload for the case of removing a token at a location
+     * 
+     * @param row - row index to be remived
+     * @param col - col index to be placed
+     */
+    public void makeMoveDelete(int row, int col) {
+        for (PublicPosition position : this.publicPositions) {
+            if (position.getRowIndex() == row && position.getColIndex() == col) {
+                position.removePlayer();
             }
         }
     }

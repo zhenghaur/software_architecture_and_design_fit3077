@@ -1,5 +1,9 @@
 package com.team8.backend.ninemanmorris;
 
+/***
+ * Enum class for representing the board
+ * objects and their view state.
+ */
 public enum Token {
 
     EMPTY(0),

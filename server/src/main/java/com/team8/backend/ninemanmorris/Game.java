@@ -9,17 +9,20 @@ public class Game {
 
     private Player currPlayer;
 
+    /**
+     * Constructor for game class
+     */
     public Game() {
         int[][] initialBoard = {
-                { 1, 0, 0, 2, 0, 0, 3 },
-                { 0, 2, 0, 1, 0, 1, 0 },
+                { 1, 0, 0, 1, 0, 0, 1 },
+                { 0, 1, 0, 1, 0, 1, 0 },
                 { 0, 0, 1, 1, 1, 0, 0 },
-                { 1, 1, 1, 0, 1, 3, 1 },
-                { 0, 0, 3, 1, 1, 0, 0 },
-                { 0, 2, 0, 3, 0, 2, 0 },
-                { 2, 0, 0, 1, 0, 0, 1 }
+                { 1, 1, 1, 0, 1, 1, 1 },
+                { 0, 0, 1, 1, 1, 0, 0 },
+                { 0, 1, 0, 1, 0, 1, 0 },
+                { 1, 0, 0, 1, 0, 0, 1 }
         };
-
+        // Creating board based on initial board
         this.board = new Board(initialBoard);
         this.playerOne = new Player("Player 1", Token.PLAYER_1);
         this.playerTwo = new Player("Player 2", Token.PLAYER_2);
@@ -42,53 +45,84 @@ public class Game {
         this.currPlayer = player;
     }
 
-    private boolean validateMove(Board newBoard) {
-        boolean isValid = true;
-        // ArrayList<ArrayList<Integer>> currBoardState = this.board.getBoardState();
-        // ArrayList<ArrayList<Integer>> newBoardState = newBoard.getBoardState();
-        // for (int i = 0; i < currBoardState.size(); i++) {
-        // if (currBoardState != newBoardState) {
-        // // Check current row if there is difference
-        // for (int j = 0; j < currBoardState.get(i).size(); j++) {
-        // if (currBoardState.get(i).get(j) != newBoardState.get(i).get(j)) {
-        // // Validate the change if spot is not unavailable, and move is made by
-        // current
-        // // player
-        // if ((currBoardState.get(i).get(j) != 1)
-        // && (newBoardState.get(i).get(j) == this.playerOne.getPlayerToken()
-        // || newBoardState.get(i).get(j) == this.playerTwo.getPlayerToken())) {
-        // System.out.println("REACHED FALSE");
-        // return false;
-        // }
-        // if (currBoardState.get(i).get(j) == 1
-        // && newBoardState.get(i).get(j) == this.currPlayer.getPlayerToken()) {
-        // System.out.print("RECAHCES");
-        // isValid = true;
-        // } else if (currBoardState.get(i).get(j) == this.currPlayer.getPlayerToken()
-        // && newBoardState.get(i).get(j) == 1) {
-        // System.out.println("RECAHES SECOND");
-        // System.out.println(currBoardState.get(i).get(j));
-        // System.out.println(newBoardState.get(i).get(j));
-        // System.out.println(this.playerOne.getPlayerToken());
-        // System.out.println(this.playerTwo.getPlayerToken());
-        // isValid = true;
-        // }
-        // }
-        // }
-        // }
-        // }
+    /**
+     * For making a move base on whether a player has a certain phase
+     * 
+     * @param fromRow - fromRow Index depending on
+     * @param fromCol
+     * @param toRow
+     * @param toCol
+     * @return
+     */
+    public boolean makeMove(int fromRow, int fromCol, int toRow, int toCol) {
+        if (currPlayer.getMovementPhase() == Phase.PLACEMENT) {
+            return placeMove(fromRow, fromCol, toRow, toCol);
+        } else if (currPlayer.getMovementPhase() == Phase.MOVEMENT) {
+            return slideMove(fromRow, fromCol, toRow, toCol);
+        } else {
+            return removeMove(fromRow, fromCol, toRow, toCol);
+        }
+    }
+
+    /**
+     * For starting placement phase,
+     * if valid check if the phase
+     * else if valid swap players
+     * 
+     * @return boolean value on whther it was a valid place move
+     */
+    public boolean placeMove(int fromRow, int fromCol, int toRow, int toCol) {
+        Move newMove = new Move(fromRow, fromCol, toRow, toCol, this.currPlayer, this.board);
+        Boolean isValid = newMove.getMoveStatus();
+
+        // Swaps if the move was valid, and the plauer
+        // does not need to remove; as removal phase
+        // indicates that it is the current players
+        // turn again and they need to remove a piece
+        if (isValid & currPlayer.getMovementPhase() != Phase.REMOVE) {
+            swapPlayers();
+        }
+
         return isValid;
     }
 
-    public boolean makeMove(int fromRow, int fromCol, int toRow, int toCol) {
+    /**
+     * For a regular slide move
+     * 
+     * @return
+     */
+    public boolean slideMove(int fromRow, int fromCol, int toRow, int toCol) {
         Boolean isValid = true;
-        // Add validation for move
+
         if (isValid) {
-            this.board.makeMove(fromRow, fromCol, toRow, toCol);
-            // Can now add validation for after move
+            this.board.makeMoveSlide(fromRow, fromCol, toRow, toCol);
+
+            /* TASK: TODO: */
+            // Can now add validation for after move - whther the player has a match 3
             // Maybe swap players maybe not depending
             // Maybe changing phase
+
+            // Check if the other player has any moves left
             this.swapPlayers();
+        }
+
+        return isValid;
+    }
+
+    /**
+     * For removig a piece from the board,
+     * and swapping players if successful
+     * and valid piece to remove
+     * 
+     * @return boolean value on if the move was successful
+     */
+    public boolean removeMove(int fromRow, int fromCol, int toRow, int toCol) {
+        Move newMove = new Move(fromRow, fromCol, toRow, toCol, this.currPlayer, this.board);
+        Boolean isValid = newMove.getMoveStatus();
+
+        if (isValid) {
+            // Check if game is over
+            swapPlayers();
         }
 
         return isValid;

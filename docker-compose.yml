@@ -2,16 +2,39 @@ version: '3'
 services:
 
   9mm-back-end:
-    image: "9mm-backend:0.0.1"
+    build:
+      context: ./server
+      dockerfile: Dockerfile
     container_name: 9mm-backend
     ports:
       - "9999:9999"
     environment:
       - SPRING.PROFILES.ACTIVE=default
+
   9mm-front-end:
-    image: "9mm-frontend:0.0.1"
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     container_name: 9mm-frontend
     ports:
       - "5173:5173"
     links:
       - 9mm-back-end
+
+# version: '3'
+# services:
+
+#   9mm-back-end:
+#     image: "9mm-backend:0.0.1"
+#     container_name: 9mm-backend
+#     ports:
+#       - "9999:9999"
+#     environment:
+#       - SPRING.PROFILES.ACTIVE=default
+#   9mm-front-end:
+#     image: "9mm-frontend:0.0.1"
+#     container_name: 9mm-frontend
+#     ports:
+#       - "5173:5173"
+#     links:
+#       - 9mm-back-end

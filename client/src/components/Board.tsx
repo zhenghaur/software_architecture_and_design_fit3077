@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import "./Board.css"
 import Tile from "./Tile"
 import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 interface GameData {
     gameId: number,
@@ -9,11 +10,18 @@ interface GameData {
     playerTurn: number,
 }
 
+const Phase = Object.freeze({
+    PLACEMENT: 0,
+    MOVEMENT: 1,
+    REMOVE: 2
+})
 
 const Board = () => {
-    // const [gameId, setGameId] = useState(0);
+    // Use state variables for determining the display and movement
     const [boardState, setBoardState] = useState<number[][]>([]);
     const [playerTurn, setPlayerTurn] = useState(1) // By default set to 1 unless changed
+    const [playerPhase, setPlayerPhase] = useState(0)
+
 
     // Piece for movement
     const [selectedPiece, setSelectedPiece] = useState<{ row: number, col: number } | null>(null)
@@ -24,7 +32,7 @@ const Board = () => {
         // Get Board from Backend
         try {
             // Default board in case backend is not online
-            const board =  [[1,0,0,2,0,0,3],
+            const board =  [[1,0,0,0,0,0,0],
                             [0,2,0,1,0,1,0],
                             [0,0,1,1,1,0,0],
                             [1,1,1,0,1,3,1],
@@ -41,22 +49,29 @@ const Board = () => {
                     "game_id": Number(gameId),
                 })
             })
-
+           
             //if backend is not online
-            if (!response) {
+            if (!response.ok) {
                 setBoardState(board)
             } else {
                 const json = await response.json();
                 setBoardState(json.board)
                 setPlayerTurn(Number(json.player) - 1)
+                console.log(Number(json.phase))
+                setPlayerPhase(Number(json.phase))
             }
         } catch (error) {
         }
     }
 
     const handleDragStart = (row: number, col: number) => {
-        // Handelling the start of dragg piece
-        setSelectedPiece({ row, col })
+        if (playerPhase == Phase.MOVEMENT) {
+            // Handelling the start of dragg piece
+            setSelectedPiece({ row, col })
+        }
+        else {
+            alertHelper("Cant move!")
+        }
     }
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -82,7 +97,7 @@ const Board = () => {
                 setBoardState(tempBoard)
             }
             else {
-                alert("Invalid Move")
+                alertHelper("Invalid Move")
             }
         }
         setSelectedPiece(null)
@@ -95,8 +110,8 @@ const Board = () => {
         console.log("SECOND")
         console.log(movementPosition[0])
         console.log(movementPosition[1])
-
         let validMove = false
+
         const response = await fetch('http://localhost:9999/makemove', {
             method: 'POST',
             headers: {
@@ -110,16 +125,46 @@ const Board = () => {
                 "game_id": gameId
             })
         })
-        console.log("HHEHEHE")
+
         console.log(response.ok)
         if (response.ok) {
             validMove = await response.json();
         } else {
             console.log("Error:", response.statusText);
         }
+        
         return(validMove)
     }
 
+    /**
+     * This is for handling 
+     * @param row 
+     * @param col 
+     */
+    const handleClickMove = async (row: number, col: number) => {
+        
+        if (playerPhase != Phase.MOVEMENT) {
+            console.log(row)
+            console.log(col)
+
+            if (playerPhase == Phase.PLACEMENT) {
+                if (!(await handleMove([0, 0], [row, col]))) {
+                    alertHelper("Position is not empty!")
+                }
+            }
+            else if (playerPhase == Phase.REMOVE) {
+                await handleMove([row, col], [0, 0])
+            }
+
+            // reinitialising
+            initialiseStates()
+        }
+
+    }
+
+    /**
+     * Player Swapper Helper Function
+     */
     const playerHelper = () => {
         if (playerTurn == 1) {
             setPlayerTurn(2)
@@ -129,14 +174,27 @@ const Board = () => {
         }
     }
 
+    /**
+     * Alert Message Helper Function
+     */
+    const alertHelper = (message: string) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: message, 
+            timer: 1000,
+            timerProgressBar: true,
+          })
+    }
+
     useEffect(() => {
         initialiseStates()
     }, [])
 
-  return (
+    return (
     <section className="section-board">
         <article className="article-player-container">
-            <h2>Player {playerTurn}'s Turn</h2>
+            <h2>Player {playerTurn == 1 ? "White": "Black"}'s Turn to {playerPhase == 0 ? "Place": playerPhase == 1 ? "Move" : "Remove"}</h2>
         </article>
         <article className="ariticle-board-container">
             {boardState.map((row, rowIndex) => {
@@ -145,6 +203,7 @@ const Board = () => {
                         return(
                             <div 
                             key={colIndex}
+                            onClick={() => handleClickMove(rowIndex, colIndex)}
                             onDragStart={() => handleDragStart(rowIndex, colIndex)}
                             onDragOver={(event) => handleDragOver(event)}
                             onDrop={(event) => handleDrop(event, rowIndex, colIndex)}

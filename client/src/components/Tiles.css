@@ -1,9 +1,11 @@
 .tile-piece {
     height: 2rem;
+    cursor: grab;
 }
 
 .null-piece {
     height: 2rem;
+    cursor: pointer;
 }
 
 .div-tile-container {

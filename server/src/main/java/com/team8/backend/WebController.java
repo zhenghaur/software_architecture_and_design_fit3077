@@ -37,6 +37,25 @@ public class WebController {
         return "Hello there!";
     }
 
+    /**
+     * 
+     * @param json
+     * @return
+     * @throws JsonMappingException
+     * @throws JsonProcessingException
+     */
+    @PostMapping(value = "/makeplace")
+    public boolean makePlace(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
+        return true;
+    }
+
+    /**
+     * 
+     * @param json
+     * @return
+     * @throws JsonMappingException
+     * @throws JsonProcessingException
+     */
     @PostMapping(value = "/makemove")
     public boolean makeMove(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
         // JSON parser
@@ -50,7 +69,7 @@ public class WebController {
         int movement_row = (int) jsonObject.get("movement_row");
         int movement_col = (int) jsonObject.get("movement_col");
         int gameId = (int) jsonObject.get("game_id");
-
+        System.out.println(json);
         return gameController.getGame(gameId).makeMove(original_row, original_col, movement_row, movement_col);
     }
 
@@ -67,7 +86,7 @@ public class WebController {
     @CrossOrigin
     @GetMapping(value = "/initgame")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> initGame() {
+    public ResponseEntity<Map<String, Object>> initGame() throws JsonMappingException, JsonProcessingException {
         // Output Json initialising
         Map<String, Object> responseMap = new HashMap<>();
 
@@ -78,6 +97,15 @@ public class WebController {
         return ResponseEntity.ok(responseMap);
     }
 
+    /**
+     * Initialising a game from the games id, this is for accessing past games, and
+     * loading games.
+     * 
+     * @param json
+     * @return
+     * @throws JsonMappingException
+     * @throws JsonProcessingException
+     */
     @CrossOrigin
     @PostMapping(value = "/initfromid")
     @ResponseBody
@@ -94,7 +122,7 @@ public class WebController {
 
         responseMap.put("board", gameController.getGame(gameId).getBoard().getBoardStateInt());
         responseMap.put("player", gameController.getGame(gameId).getCurrPlayer().getPlayerToken().getToken());
-
+        responseMap.put("phase", gameController.getGame(gameId).getCurrPlayer().getMovementPhase().getPhase());
         return ResponseEntity.ok(responseMap);
     }
 }

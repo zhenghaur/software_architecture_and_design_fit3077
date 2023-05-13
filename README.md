@@ -17,7 +17,8 @@ The main Project files for Nine Man Morris can be found in `server/src/main/java
 
 *Running With Docker*
 # Docker (After Building Individual Docker folders)
-`docker-compose up`
+`docker compose build`
+`docker compose up`
 
 # Docker (Manual)
 `cd server` <br>
