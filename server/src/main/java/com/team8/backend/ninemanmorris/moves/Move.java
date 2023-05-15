@@ -43,21 +43,6 @@ public class Move {
         this.toCol = toCol;
     }
 
-    private void slideMove(int fromRow, int fromCol, int toRow, int toCol) {
-        // Add validation for move
-        // Check if the from and to is the same = false
-        // Check if the players turn and is not their token = false
-        // Check if the piece is not TILE TOKEN = false
-        // Check if the to in not in the from's neighbour = false
-        // isValid based on this
-
-        // ceckong neighbours
-    }
-
-    private void removeMove(int fromRow, int fromCol) {
-
-    }
-
     /**
      * returns if the publick Position is empty
      * 
