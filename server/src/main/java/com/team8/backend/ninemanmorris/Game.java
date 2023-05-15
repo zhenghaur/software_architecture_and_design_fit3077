@@ -1,6 +1,6 @@
 package com.team8.backend.ninemanmorris;
 
-import java.util.ArrayList;
+import com.team8.backend.ninemanmorris.moves.*;
 
 public class Game {
     private Board board;
@@ -72,7 +72,7 @@ public class Game {
      * @return boolean value on whther it was a valid place move
      */
     public boolean placeMove(int fromRow, int fromCol, int toRow, int toCol) {
-        Move newMove = new Move(fromRow, fromCol, toRow, toCol, this.currPlayer, this.board);
+        Move newMove = new PlaceMove(fromRow, fromCol, toRow, toCol, this.currPlayer, this.board);
         Boolean isValid = newMove.getMoveStatus();
 
         // Swaps if the move was valid, and the plauer

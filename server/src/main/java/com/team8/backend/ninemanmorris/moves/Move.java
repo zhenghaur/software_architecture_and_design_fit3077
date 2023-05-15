@@ -1,16 +1,27 @@
-package com.team8.backend.ninemanmorris;
+package com.team8.backend.ninemanmorris.moves;
 
 import java.util.ArrayList;
+
+import com.team8.backend.ninemanmorris.Board;
+import com.team8.backend.ninemanmorris.Phase;
+import com.team8.backend.ninemanmorris.Player;
+import com.team8.backend.ninemanmorris.PublicPosition;
+import com.team8.backend.ninemanmorris.Token;
 
 /**
  * Class for modularising the Move function
  */
 public class Move {
     // Failed by default
-    private boolean moveStatus = false;
+    protected boolean moveStatus = false;
     // Variables for using
-    private Board board;
-    private Player player;
+    protected Board board;
+    protected Player player;
+    // Coordinate Variables
+    private int fromRow;
+    private int fromCol;
+    private int toRow;
+    private int toCol;
 
     /**
      * Constructor for the Move Class, makes a move based on the input
@@ -26,41 +37,10 @@ public class Move {
         // Setting variables for use in functions
         this.board = board;
         this.player = player;
-
-        if (player.getMovementPhase() == Phase.PLACEMENT) {
-            placeMove(toRow, toCol);
-        } else if (player.getMovementPhase() == Phase.MOVEMENT) {
-            slideMove(fromRow, fromCol, toRow, toCol);
-        } else if (player.getMovementPhase() == Phase.REMOVE) {
-            removeMove(fromRow, fromCol);
-        }
-    }
-
-    /**
-     * Placing tokens at locatio
-     * 
-     * @param toRow - Rox coord of the position to place
-     * @param toCol - Col coord of the position to place
-     */
-    private void placeMove(int toRow, int toCol) {
-        ArrayList<PublicPosition> publicPositions = this.board.getPublicPositions();
-
-        for (PublicPosition position : publicPositions) {
-            // Obtains the position at the given index
-            if (position.getRowIndex() == toRow & position.getColIndex() == toCol) {
-                // If the position is empty
-                if (this.publicPositionEmpty(position)) {
-                    // Checks for valid playerToken to be set
-                    if (this.player.getPlayerToken() == Token.PLAYER_1) {
-                        position.setPlayerOne();
-                    } else {
-                        position.setPlayerTwo();
-                    }
-                    this.player.decrementStorageTokens();
-                    this.moveStatus = true;
-                }
-            }
-        }
+        this.fromRow = fromRow;
+        this.fromCol = fromCol;
+        this.toRow = toRow;
+        this.toCol = toCol;
     }
 
     private void slideMove(int fromRow, int fromCol, int toRow, int toCol) {
@@ -84,7 +64,7 @@ public class Move {
      * @param position
      * @return
      */
-    private boolean publicPositionEmpty(PublicPosition position) {
+    protected boolean publicPositionEmpty(PublicPosition position) {
         return position.getToken() == Token.TILE;
     }
 
