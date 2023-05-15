@@ -61,3 +61,6 @@ Making a move when not the turn, pings as invalid move and prevents <br>
 Lastly attempting to move to blank spaces or ontop of opposite color also pings as invalid<br>
 
 *Important to note, without the backend a default board is still loaded but without invalid checking or turn swapping*<br>
+
+Example <br>
+*docker tag project-9mm-back-end:latest grassyairplane/project-9mm-back-end*

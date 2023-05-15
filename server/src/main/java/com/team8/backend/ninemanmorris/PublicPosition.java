@@ -12,7 +12,7 @@ public class PublicPosition implements Position {
     final static Token PUBLIC_POSITION_TOKEN = Token.TILE;
     final static Boolean PUBLIC_POSITION_ENTRANCE = true;
 
-    private List<Position> neighbors = new ArrayList<>();
+    private List<PublicPosition> neighbors = new ArrayList<>();
     private Token token = Token.TILE;
     private int rowIndex;
     private int colIndex;
@@ -41,7 +41,7 @@ public class PublicPosition implements Position {
         return this.colIndex;
     }
 
-    public List<Position> getNeighbours() {
+    public List<PublicPosition> getNeighbours() {
         return this.neighbors;
     }
 
@@ -72,7 +72,7 @@ public class PublicPosition implements Position {
      * 
      * @param position - Position that is a valid neighbour
      */
-    public void addNeighbour(Position position) {
+    public void addNeighbour(PublicPosition position) {
         this.neighbors.add(position);
     }
 }
