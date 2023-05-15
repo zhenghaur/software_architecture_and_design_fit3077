@@ -80,17 +80,61 @@ public class Move {
 
     private bool checkMillPosition(int row, int col) {
         ArrayList<PublicPosition> publicPositions = this.board.getPublicPositions();
-        int token = publicPositions.get(row).get(col).getToken();
+        int token = this.board.getTokenAtCoord(row, col);
         boolean rowFlag = true;
         boolean colFlag = true;
-        for (int i = 0; i < publicPositions.length; i++) {
-            if (publicPositions.get(row).get(i).getToken() != Token.EMPTY && token != publicPositions.get(row).get(i).getToken()){
-                rowFlag = false;
+        if (row != 3){
+            for (PublicPosition position : publicPositions) {
+                // Obtains the position at the given index
+                if (position.getRowIndex() == row && position.getToken() != token) {
+                        rowFlag = false;
+                    }
+                }
+            }
+        } else {
+            if (col < 3){
+                for (PublicPosition position : publicPositions) {
+                    // Obtains the position at the given index
+                    if (position.getRowIndex() == row && position.getToken() != token && position.getColIndex < 3) {
+                            rowFlag = false;
+                        }
+                    }
+                }
+            } else {
+                for (PublicPosition position : publicPositions) {
+                    // Obtains the position at the given index
+                    if (position.getRowIndex() == row && position.getToken() != token && position.getColIndex > 3) {
+                            rowFlag = false;
+                        }
+                    }
+                }
             }
         }
-        for (int i = 0; i < publicPositions.length; i++) {
-            if (publicPositions.get(i).get(col).getToken() != Token.EMPTY && token != publicPositions.get(i).get(col).getToken()){
-                colFlag = false;
+        if (col != 3){
+            for (PublicPosition position : publicPositions) {
+                // Obtains the position at the given index
+                if (position.getColIndex() == col && position.getToken() != token) {
+                        colFlag = false;
+                    }
+                }
+            }
+        } else {
+            if (row < 3){
+                for (PublicPosition position : publicPositions) {
+                    // Obtains the position at the given index
+                    if (position.getColIndex() == col && position.getToken() != token && position.getRowIndex < 3) {
+                            colFlag = false;
+                        }
+                    }
+                }
+            } else {
+                for (PublicPosition position : publicPositions) {
+                    // Obtains the position at the given index
+                    if (position.getColIndex() == col && position.getToken() != token && position.getRowIndex > 3) {
+                            colFlag = false;
+                        }
+                    }
+                }
             }
         }
         return rowFlag || colFlag;
