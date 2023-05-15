@@ -4,4 +4,8 @@ public interface Position {
     boolean canEnter();
 
     Token getToken();
+
+    int getRowIndex();
+
+    int getColIndex();
 }

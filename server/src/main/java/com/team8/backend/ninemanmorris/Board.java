@@ -33,7 +33,7 @@ public class Board {
 
                 // First case that It is a non valid tile
                 if (positionValue == Token.EMPTY.getToken()) {
-                    boardState[row][col] = new PrivatePosition();
+                    boardState[row][col] = new PrivatePosition(row, col);
                 } else {
                     // Creates a new Public position
                     PublicPosition newPosition = new PublicPosition(row, col);
