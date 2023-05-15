@@ -78,6 +78,24 @@ public class Move {
 
     }
 
+    private bool checkMillPosition(int row, int col) {
+        ArrayList<PublicPosition> publicPositions = this.board.getPublicPositions();
+        int token = publicPositions.get(row).get(col).getToken();
+        boolean rowFlag = true;
+        boolean colFlag = true;
+        for (int i = 0; i < publicPositions.length; i++) {
+            if (publicPositions.get(row).get(i).getToken() != Token.EMPTY && token != publicPositions.get(row).get(i).getToken()){
+                rowFlag = false;
+            }
+        }
+        for (int i = 0; i < publicPositions.length; i++) {
+            if (publicPositions.get(i).get(col).getToken() != Token.EMPTY && token != publicPositions.get(i).get(col).getToken()){
+                colFlag = false;
+            }
+        }
+        return rowFlag || colFlag;
+    }
+
     /**
      * returns if the publick Position is empty
      * 
