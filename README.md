@@ -15,6 +15,8 @@ The Restful API the Client interacts with can be found in `server/src/main/java/
 The main Project files for Nine Man Morris can be found in `server/src/main/java/com/team8/backend/ninemanmorris`
 <br>
 
+<h1>JAVA VERSION 17</h1>
+
 *Running With Docker*
 # Docker (After Building Individual Docker folders)
 `docker compose build`
