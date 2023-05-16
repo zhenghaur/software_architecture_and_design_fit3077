@@ -83,4 +83,67 @@ public class Move {
         return (count < 3) || flag;
         
     }
+
+    private bool checkMillPosition(int row, int col) {
+        ArrayList<PublicPosition> publicPositions = this.board.getPublicPositions();
+        int token = this.board.getTokenAtCoord(row, col);
+        boolean rowFlag = true;
+        boolean colFlag = true;
+        if (row != 3){
+            for (PublicPosition position : publicPositions) {
+                // Obtains the position at the given index
+                if (position.getRowIndex() == row && position.getToken() != token) {
+                        rowFlag = false;
+                    }
+                }
+            }
+        } else {
+            if (col < 3){
+                for (PublicPosition position : publicPositions) {
+                    // Obtains the position at the given index
+                    if (position.getRowIndex() == row && position.getToken() != token && position.getColIndex < 3) {
+                            rowFlag = false;
+                        }
+                    }
+                }
+            } else {
+                for (PublicPosition position : publicPositions) {
+                    // Obtains the position at the given index
+                    if (position.getRowIndex() == row && position.getToken() != token && position.getColIndex > 3) {
+                            rowFlag = false;
+                        }
+                    }
+                }
+            }
+        }
+        if (col != 3){
+            for (PublicPosition position : publicPositions) {
+                // Obtains the position at the given index
+                if (position.getColIndex() == col && position.getToken() != token) {
+                        colFlag = false;
+                    }
+                }
+            }
+        } else {
+            if (row < 3){
+                for (PublicPosition position : publicPositions) {
+                    // Obtains the position at the given index
+                    if (position.getColIndex() == col && position.getToken() != token && position.getRowIndex < 3) {
+                            colFlag = false;
+                        }
+                    }
+                }
+            } else {
+                for (PublicPosition position : publicPositions) {
+                    // Obtains the position at the given index
+                    if (position.getColIndex() == col && position.getToken() != token && position.getRowIndex > 3) {
+                            colFlag = false;
+                        }
+                    }
+                }
+            }
+        }
+        return rowFlag || colFlag;
+    }
+
 }
