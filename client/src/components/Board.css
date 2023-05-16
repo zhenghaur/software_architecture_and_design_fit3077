@@ -6,10 +6,6 @@
     
 }
 
-.article-player-container {
-    margin: 1rem;
-}
-
 .ariticle-board-container {
     border: 1px solid black;
 }
@@ -22,5 +18,22 @@
     flex-direction: column;
 
     height: 100vh;
+    margin: 0 1rem 0 1rem;
 }
 
+.section-board > * {
+    max-height: 25rem; /* Set the maximum height for the flex items */
+}
+
+.main-game {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+@media (max-width: 850px) {
+    .main-game {
+      flex-direction: column; 
+    }
+}

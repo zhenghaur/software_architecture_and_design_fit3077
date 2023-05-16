@@ -1,0 +1,42 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.grid-header {
+    font-weight: bold;
+}
+
+.grid-container > div {
+    padding: .5rem;
+    border: 1px solid #ccc;
+}
+
+.message-input {
+    flex-grow: 1;
+    width: 88%;
+    padding: 5px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.send-button {
+    flex-grow: 0;
+    width: 12%;
+    padding: 5px 10px;
+    margin: 0;
+}
+
+.message-history {
+    border: 1px solid black;
+    padding: .5rem;
+    box-sizing: border-box;
+    margin: .5rem 0 .5rem 0;
+    height: 8.5rem;
+    color: grey;
+}
+
+.div-center {
+    text-align: center;
+}
