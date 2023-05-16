@@ -45,6 +45,14 @@ public class Game {
         this.currPlayer = player;
     }
 
+    public Player getPlayerOne() {
+        return this.playerOne;
+    }
+
+    public Player getPlayerTwo() {
+        return this.playerTwo;
+    }
+
     /**
      * For making a move base on whether a player has a certain phase
      * 

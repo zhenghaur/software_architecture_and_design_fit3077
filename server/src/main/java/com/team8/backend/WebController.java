@@ -125,6 +125,32 @@ public class WebController {
         responseMap.put("phase", gameController.getGame(gameId).getCurrPlayer().getMovementPhase().getPhase());
         return ResponseEntity.ok(responseMap);
     }
+
+    @CrossOrigin
+    @PostMapping(value = "/initplayerdata")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> initPlayerData(@RequestBody String json)
+            throws JsonMappingException, JsonProcessingException {
+        // Output Json initialising
+        Map<String, Object> responseMap = new HashMap<>();
+        // JSON parser
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, Object> jsonObject = objectMapper.readValue(json, new TypeReference<HashMap<String, Object>>() {
+        });
+
+        int gameId = (int) jsonObject.get("game_id");
+
+        responseMap.put("player_one_name", gameController.getGame(gameId).getPlayerOne().getPlayerName());
+        responseMap.put("player_two_name", gameController.getGame(gameId).getPlayerTwo().getPlayerName());
+        responseMap.put("player_one_token_count", gameController.getGame(gameId).getPlayerOne().getNumTokens());
+        responseMap.put("player_two_token_count", gameController.getGame(gameId).getPlayerTwo().getNumTokens());
+        responseMap.put("player_one_token_storage",
+                gameController.getGame(gameId).getPlayerOne().getNumStorageTokens());
+        responseMap.put("player_two_token_storage",
+                gameController.getGame(gameId).getPlayerTwo().getNumStorageTokens());
+        System.out.println(json);
+        return ResponseEntity.ok(responseMap);
+    }
 }
 
 // EXAMPLES DO NO TOUCH

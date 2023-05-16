@@ -1,10 +1,12 @@
 package com.team8.backend.ninemanmorris.moves;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.team8.backend.ninemanmorris.Board;
 import com.team8.backend.ninemanmorris.Phase;
 import com.team8.backend.ninemanmorris.Player;
+import com.team8.backend.ninemanmorris.Position;
 import com.team8.backend.ninemanmorris.PublicPosition;
 import com.team8.backend.ninemanmorris.Token;
 
@@ -41,6 +43,24 @@ public class Move {
         this.fromCol = fromCol;
         this.toRow = toRow;
         this.toCol = toCol;
+    }
+
+    /**
+     * CHecks for whether a given position is in a mill
+     * 
+     * @param position
+     * @return
+     */
+    public boolean positionInMill(PublicPosition position) {
+        boolean inMill = false;
+
+        for (Position neighbour : position.getNeighbours()) {
+            if (neighbour.getToken() == position.getToken()) {
+
+            }
+        }
+
+        return inMill;
     }
 
     /**

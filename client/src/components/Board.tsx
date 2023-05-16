@@ -3,6 +3,7 @@ import "./Board.css"
 import Tile from "./Tile"
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import PlayerData from "./PlayerData";
 
 interface GameData {
     gameId: number,
@@ -22,6 +23,13 @@ const Board = () => {
     const [playerTurn, setPlayerTurn] = useState(1) // By default set to 1 unless changed
     const [playerPhase, setPlayerPhase] = useState(0)
 
+    // Player state variables
+    const [playerOneName, setPlayerOneName] = useState("");
+    const [playerTwoName, setPlayerTwoName] = useState("");
+    const [playerOneTokensLeft, setPlayerOneTokensLeft] = useState("");
+    const [playerTwoTokensLeft, setPlayerTwoTokensLeft] = useState("");
+    const [playerOneTokensStorage, setPlayerOneTokensStorage] = useState("");
+    const [playerTwoTokensStorage, setPlayerTwoTokensStorage] = useState("");
 
     // Piece for movement
     const [selectedPiece, setSelectedPiece] = useState<{ row: number, col: number } | null>(null)
@@ -54,13 +62,38 @@ const Board = () => {
             if (!response.ok) {
                 setBoardState(board)
             } else {
-                const json = await response.json();
+                const json = await response.json()
                 setBoardState(json.board)
                 setPlayerTurn(Number(json.player) - 1)
                 console.log(Number(json.phase))
                 setPlayerPhase(Number(json.phase))
             }
         } catch (error) {
+        }
+    }
+
+    const initialisePlayerStates = async() => {
+        try {
+            const response = await fetch('http://localhost:9999/initplayerdata', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "game_id": Number(gameId),
+                })
+            })
+            if (response.ok) {
+                const json = await response.json()
+                setPlayerOneName(json.player_one_name)
+                setPlayerTwoName(json.player_two_name)
+                setPlayerOneTokensLeft(json.player_one_token_count)
+                setPlayerTwoTokensLeft(json.player_two_token_count)
+                setPlayerOneTokensStorage(json.player_one_token_storage)
+                setPlayerTwoTokensStorage(json.player_two_token_storage)
+            }
+        } catch (error) {
+            
         }
     }
 
@@ -158,6 +191,7 @@ const Board = () => {
 
             // reinitialising
             initialiseStates()
+            initialisePlayerStates()
         }
 
     }
@@ -189,33 +223,37 @@ const Board = () => {
 
     useEffect(() => {
         initialiseStates()
+        initialisePlayerStates()
     }, [])
 
     return (
-    <section className="section-board">
-        <article className="article-player-container">
-            <h2>Player {playerTurn == 1 ? "White": "Black"}'s Turn to {playerPhase == 0 ? "Place": playerPhase == 1 ? "Move" : "Remove"}</h2>
-        </article>
-        <article className="ariticle-board-container">
-            {boardState.map((row, rowIndex) => {
-                return (<div key={rowIndex}>
-                    <div className="article-board" >{row.map((col, colIndex) => {
-                        return(
-                            <div 
-                            key={colIndex}
-                            onClick={() => handleClickMove(rowIndex, colIndex)}
-                            onDragStart={() => handleDragStart(rowIndex, colIndex)}
-                            onDragOver={(event) => handleDragOver(event)}
-                            onDrop={(event) => handleDrop(event, rowIndex, colIndex)}
-                            >
-                                <Tile tile={col}/>
-                            </div>
-                        )
-                    })}</div>
-                </div>
-                )
-            })}
-        </article>
+    <section className="main-game">
+        <section className="section-board">
+            <article className="article-player-container">
+                <h2>Player {playerTurn == 1 ? "White": "Black"}'s Turn to {playerPhase == 0 ? "Place": playerPhase == 1 ? "Move" : "Remove"}</h2>
+            </article>
+            <article className="ariticle-board-container">
+                {boardState.map((row, rowIndex) => {
+                    return (<div key={rowIndex}>
+                        <div className="article-board" >{row.map((col, colIndex) => {
+                            return(
+                                <div 
+                                key={colIndex}
+                                onClick={() => handleClickMove(rowIndex, colIndex)}
+                                onDragStart={() => handleDragStart(rowIndex, colIndex)}
+                                onDragOver={(event) => handleDragOver(event)}
+                                onDrop={(event) => handleDrop(event, rowIndex, colIndex)}
+                                >
+                                    <Tile tile={col}/>
+                                </div>
+                            )
+                        })}</div>
+                    </div>
+                    )
+                })}
+            </article>
+        </section>
+        <PlayerData playerOneName={playerOneName} playerTwoName={playerTwoName} playerOneTokens={playerOneTokensLeft} playerTwoTokens={playerTwoTokensLeft} playerOneStorage={playerOneTokensStorage} playerTwoStorage={playerTwoTokensStorage} />
     </section>
   )
 }
