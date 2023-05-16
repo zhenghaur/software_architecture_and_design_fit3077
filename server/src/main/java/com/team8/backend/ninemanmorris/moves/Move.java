@@ -61,4 +61,26 @@ public class Move {
     public boolean getMoveStatus() {
         return this.moveStatus;
     }
+
+    private bool checkValidMove(int token){
+        ArrayList<PublicPosition> publicPositions = this.board.getPublicPositions();
+        int count = 0
+        boolean flag = false;
+        int i = 0
+        while (!flag && i < publicPositions.length()){
+            if (publicPositions.get(i).getToken() == token) {
+                count++;
+                for (PublicPosition neighbor :  position.getNeighbours) {
+                    // Obtains the position at the given index
+                    if (neighbor.canEnter()) {
+                            flag = true;
+                        }
+                    }
+                } 
+            }
+            i++;
+        }
+        return (count < 3) || flag;
+        
+    }
 }
