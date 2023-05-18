@@ -4,8 +4,8 @@ package com.team8.backend.ninemanmorris;
  * Player Class
  */
 public class Player {
-    public static int DEFAULT_NUM_STORAGE_TOKENS = 9;
-    public static int DEFAULT_NUM_TOKENS = 9;
+    public static int DEFAULT_NUM_STORAGE_TOKENS = 8;
+    public static int DEFAULT_NUM_TOKENS = 8;
 
     private String playerName;
     private Token playerToken;
@@ -86,7 +86,7 @@ public class Player {
         this.numStorageTokens -= 1;
 
         // Checks if the number of tokens in storage is 0 indicating end
-        if (numStorageTokens == 0) {
+        if (numStorageTokens <= 0) {
             this.movementPhase = Phase.MOVEMENT;
         }
     }

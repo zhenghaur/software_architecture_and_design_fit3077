@@ -69,7 +69,9 @@ public class WebController {
         int movement_row = (int) jsonObject.get("movement_row");
         int movement_col = (int) jsonObject.get("movement_col");
         int gameId = (int) jsonObject.get("game_id");
+
         System.out.println(json);
+        this.gameController.getBoard(gameId).printBoard();
         return gameController.getGame(gameId).makeMove(original_row, original_col, movement_row, movement_col);
     }
 
@@ -123,6 +125,7 @@ public class WebController {
         responseMap.put("board", gameController.getGame(gameId).getBoard().getBoardStateInt());
         responseMap.put("player", gameController.getGame(gameId).getCurrPlayer().getPlayerToken().getToken());
         responseMap.put("phase", gameController.getGame(gameId).getCurrPlayer().getMovementPhase().getPhase());
+        responseMap.put("game_status", gameController.getGame(gameId).getGameStatus());
         return ResponseEntity.ok(responseMap);
     }
 
@@ -148,7 +151,6 @@ public class WebController {
                 gameController.getGame(gameId).getPlayerOne().getNumStorageTokens());
         responseMap.put("player_two_token_storage",
                 gameController.getGame(gameId).getPlayerTwo().getNumStorageTokens());
-        System.out.println(json);
         return ResponseEntity.ok(responseMap);
     }
 }

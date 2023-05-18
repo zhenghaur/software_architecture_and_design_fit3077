@@ -17,21 +17,6 @@ The main Project files for Nine Man Morris can be found in `server/src/main/java
 
 <h1>JAVA VERSION 17</h1>
 
-*Running With Docker*
-# Docker (After Building Individual Docker folders)
-`docker compose build`
-`docker compose up`
-
-# Docker (Manual)
-`cd server` <br>
-`docker build -t 9mm-backend:0.0.1 .` <br> 
-`docker run -it  -p9999:9999 backend-image-id` <br>
-
-`cd client` <br>
-`docker build -t 9mm-frontend:0.0.1 .` <br>
-`docker run -it  -p5173:5173 frontend-image-id` <br>
-
-*Running without Docker*
 # Start Backend
 `navigate to root`<br>
 `cd server` <br>
@@ -43,6 +28,20 @@ The main Project files for Nine Man Morris can be found in `server/src/main/java
 `cd client` <br>
 `npm install` <br>
 `npm run dev` <br>
+
+# Docker (After Building Individual Docker folders)
+<p>You may still need to build the gradle</p> <br>
+`docker compose build`
+`docker compose up`
+
+# Docker (Manual)
+`cd server` <br>
+`docker build -t 9mm-backend:0.0.1 .` <br> 
+`docker run -it  -p9999:9999 backend-image-id` <br>
+
+`cd client` <br>
+`docker build -t 9mm-frontend:0.0.1 .` <br>
+`docker run -it  -p5173:5173 frontend-image-id` <br>
 
 # Instructions & Important to note
 1) Advised to start the Backend before the Frontend, as the population of the FE relies on the BE data <br>

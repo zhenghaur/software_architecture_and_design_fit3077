@@ -34,7 +34,7 @@ const PlayerData = (props: PlayerData) => {
                 </article>
                 <section className="message-section">
                     <article className="message-history">
-                        <p>Not working</p>
+                        <p>Not Implemented</p>
                     </article>
                     <div className="message-input-container">
                         <input type="text" className="message-input" placeholder="Type your message"/>

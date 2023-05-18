@@ -8,6 +8,7 @@ public class Game {
     private Player playerTwo;
 
     private Player currPlayer;
+    private Boolean gameStatus = false;
 
     /**
      * Constructor for game class
@@ -53,6 +54,14 @@ public class Game {
         return this.playerTwo;
     }
 
+    public void setGameStatus(boolean status) {
+        this.gameStatus = status;
+    }
+
+    public boolean getGameStatus() {
+        return this.gameStatus;
+    }
+
     /**
      * For making a move base on whether a player has a certain phase
      * 
@@ -63,13 +72,25 @@ public class Game {
      * @return
      */
     public boolean makeMove(int fromRow, int fromCol, int toRow, int toCol) {
+        boolean moveStatus;
         if (currPlayer.getMovementPhase() == Phase.PLACEMENT) {
-            return placeMove(fromRow, fromCol, toRow, toCol);
+            moveStatus = this.placeMove(fromRow, fromCol, toRow, toCol);
         } else if (currPlayer.getMovementPhase() == Phase.MOVEMENT) {
-            return slideMove(fromRow, fromCol, toRow, toCol);
+            // IF ther exist valid moves
+            moveStatus = slideMove(fromRow, fromCol, toRow, toCol);
         } else {
-            return removeMove(fromRow, fromCol, toRow, toCol);
+            moveStatus = removeMove(fromRow, fromCol, toRow, toCol);
         }
+
+        // if (currPlayer.getMovementPhase() == Phase.MOVEMENT) {
+        // // If there are no valid moves left
+        // if (!checkValidMovesLeft()) {
+        // setGameEnd();
+        // }
+        // }
+
+        // Returning the boolean status of the move
+        return moveStatus;
     }
 
     /**
@@ -112,6 +133,14 @@ public class Game {
 
             // Check if the other player has any moves left
             this.swapPlayers();
+
+            // Checker for the lack of valid moves left for player
+            if (currPlayer.getMovementPhase() == Phase.MOVEMENT) {
+                // If there are no valid moves left
+                if (!checkValidMovesLeft()) {
+                    setGameEnd();
+                }
+            }
         }
 
         return isValid;
@@ -125,15 +154,52 @@ public class Game {
      * @return boolean value on if the move was successful
      */
     public boolean removeMove(int fromRow, int fromCol, int toRow, int toCol) {
-        Move newMove = new Move(fromRow, fromCol, toRow, toCol, this.currPlayer, this.board);
+        Move newMove = new RemoveMove(fromRow, fromCol, toRow, toCol, this.currPlayer, this.board);
         Boolean isValid = newMove.getMoveStatus();
 
         if (isValid) {
             // Check if game is over
             swapPlayers();
+            this.currPlayer.decrementTokens();
+
+            // If the currPlayer has less than 3
+            if (currPlayer.getNumTokens() < 3) {
+                setGameEnd();
+            }
         }
 
         return isValid;
+    }
+
+    /**
+     * Checker for the game ending
+     */
+    private void setGameEnd() {
+        // Swaps players
+        this.swapPlayers();
+        // Sets the game status
+        this.setGameStatus(!this.getGameStatus());
+    }
+
+    private boolean checkValidMovesLeft() {
+
+        boolean flag = false;
+
+        // Loops through all the public positions
+        for (PublicPosition position : this.board.getPublicPositions()) {
+            // If the token of the curr player
+            if (position.getToken() == currPlayer.getPlayerToken()) {
+                // Check for its neighbours and look for an empty tile
+                for (Position neighbour : position.getNeighbours()) {
+                    if (neighbour.getToken() == Token.TILE) {
+                        flag = true;
+                    }
+                }
+
+            }
+        }
+
+        return flag;
     }
 
     /**
