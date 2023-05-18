@@ -16,6 +16,7 @@ import com.team8.backend.ninemanmorris.Token;
 public class Move {
     // Failed by default
     protected boolean moveStatus = false;
+    protected boolean gameStatus = false;
     // Variables for using
     protected Board board;
     protected Player player;
@@ -46,24 +47,6 @@ public class Move {
     }
 
     /**
-     * CHecks for whether a given position is in a mill
-     * 
-     * @param position
-     * @return
-     */
-    public boolean positionInMill(PublicPosition position) {
-        boolean inMill = false;
-
-        for (Position neighbour : position.getNeighbours()) {
-            if (neighbour.getToken() == position.getToken()) {
-
-            }
-        }
-
-        return inMill;
-    }
-
-    /**
      * returns if the publick Position is empty
      * 
      * @param position
@@ -82,88 +65,65 @@ public class Move {
         return this.moveStatus;
     }
 
-    private bool checkValidMove(int token){
-        ArrayList<PublicPosition> publicPositions = this.board.getPublicPositions();
-        int count = 0
-        boolean flag = false;
-        int i = 0
-        while (!flag && i < publicPositions.length()){
-            if (publicPositions.get(i).getToken() == token) {
-                count++;
-                for (PublicPosition neighbor :  position.getNeighbours) {
-                    // Obtains the position at the given index
-                    if (neighbor.canEnter()) {
-                            flag = true;
-                        }
-                    }
-                } 
-            }
-            i++;
-        }
-        return (count < 3) || flag;
-        
-    }
+    /***
+     * Checks for neighbours of the current position, and
+     * determines if it is the same piece, followed by updating
+     * a counter based on the number of similar. This is followed
+     * by looping throug hthe neighbours of the similar position
+     * and repeating the process. By the end, if the row or col count
+     * are equal to 3 or more, a mill exist at that position
+     * 
+     * @param position - PublicPosition of the position being checked for
+     * @return - boolean value on whether a mill exist at the position
+     */
+    public boolean checkMillPosition(PublicPosition position) { // remember
 
-    private bool checkMillPosition(int row, int col) {
-        ArrayList<PublicPosition> publicPositions = this.board.getPublicPositions();
-        int token = this.board.getTokenAtCoord(row, col);
-        boolean rowFlag = true;
-        boolean colFlag = true;
-        if (row != 3){
-            for (PublicPosition position : publicPositions) {
-                // Obtains the position at the given index
-                if (position.getRowIndex() == row && position.getToken() != token) {
-                        rowFlag = false;
-                    }
-                }
-            }
-        } else {
-            if (col < 3){
-                for (PublicPosition position : publicPositions) {
-                    // Obtains the position at the given index
-                    if (position.getRowIndex() == row && position.getToken() != token && position.getColIndex < 3) {
-                            rowFlag = false;
-                        }
-                    }
-                }
-            } else {
-                for (PublicPosition position : publicPositions) {
-                    // Obtains the position at the given index
-                    if (position.getRowIndex() == row && position.getToken() != token && position.getColIndex > 3) {
-                            rowFlag = false;
-                        }
-                    }
-                }
-            }
-        }
-        if (col != 3){
-            for (PublicPosition position : publicPositions) {
-                // Obtains the position at the given index
-                if (position.getColIndex() == col && position.getToken() != token) {
-                        colFlag = false;
-                    }
-                }
-            }
-        } else {
-            if (row < 3){
-                for (PublicPosition position : publicPositions) {
-                    // Obtains the position at the given index
-                    if (position.getColIndex() == col && position.getToken() != token && position.getRowIndex < 3) {
-                            colFlag = false;
-                        }
-                    }
-                }
-            } else {
-                for (PublicPosition position : publicPositions) {
-                    // Obtains the position at the given index
-                    if (position.getColIndex() == col && position.getToken() != token && position.getRowIndex > 3) {
-                            colFlag = false;
-                        }
-                    }
-                }
-            }
-        }
-        return rowFlag || colFlag;
-    }
+        // Obtained for easy access
+        int rowIndex = position.getRowIndex();
+        int colIndex = position.getColIndex();
 
+        // Counter of positions with the required index
+        int rowCount = 1;
+        int colCount = 1;
+
+        // Store all
+        ArrayList<PublicPosition> temporaryPositions = new ArrayList<PublicPosition>();
+
+        for (Position temporaryPosition : position.getNeighbours()) {
+            if (temporaryPosition.getToken() == position.getToken()) {
+                // Add into the array after finding from Public Positions
+                for (PublicPosition temporaryPublic : board.getPublicPositions()) {
+                    if (temporaryPublic.getRowIndex() == temporaryPosition.getRowIndex()
+                            & temporaryPublic.getColIndex() == temporaryPosition.getColIndex()) {
+                        // adds to it
+                        temporaryPositions.add(temporaryPublic);
+                    }
+                }
+                // Checks for row and increments the count
+                if (temporaryPosition.getRowIndex() == rowIndex) {
+                    rowCount++;
+                } else if (temporaryPosition.getColIndex() == colIndex) {
+                    colCount++;
+                }
+            }
+        }
+
+        // Iteration over the neighbour
+        for (PublicPosition temporaryPublicPosition : temporaryPositions) {
+            for (Position temporaryPosition : temporaryPublicPosition.getNeighbours()) {
+                if (temporaryPosition.getToken() == position.getToken()) {
+                    // Checks for row and increments the count
+                    if (temporaryPosition.getRowIndex() == rowIndex && temporaryPosition.getColIndex() == colIndex) {
+                        // pass
+                    } else if (temporaryPosition.getRowIndex() == rowIndex) {
+                        rowCount++;
+                    } else if (temporaryPosition.getColIndex() == colIndex) {
+                        colCount++;
+                    }
+                }
+            }
+        }
+
+        return rowCount >= 3 || colCount >= 3;
+    }
 }

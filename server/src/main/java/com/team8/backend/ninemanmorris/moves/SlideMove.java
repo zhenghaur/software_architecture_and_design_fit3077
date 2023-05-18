@@ -5,11 +5,12 @@ import com.team8.backend.ninemanmorris.Player;
 import com.team8.backend.ninemanmorris.PublicPosition;
 import com.team8.backend.ninemanmorris.Token;
 
-public class SlideMove extends Move{
+public class SlideMove extends Move {
 
     public SlideMove(int fromRow, int fromCol, int toRow, int toCol, Player player, Board board) {
         super(fromRow, fromCol, toRow, toCol, player, board);
-        //TODO Auto-generated constructor stub
+        // Calling the slide move function
+        slideMove(fromRow, fromCol, toRow, toCol);
     }
 
     private boolean slideMove(int fromRow, int fromCol, int toRow, int toCol) {
@@ -62,7 +63,7 @@ public class SlideMove extends Move{
 
         // ceckong neighbours
     }
-    
+
     /**
      * Determines if a public position exists in publicPositions array.
      * 

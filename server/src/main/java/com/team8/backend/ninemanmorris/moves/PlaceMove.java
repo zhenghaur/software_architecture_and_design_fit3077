@@ -3,6 +3,7 @@ package com.team8.backend.ninemanmorris.moves;
 import java.util.ArrayList;
 
 import com.team8.backend.ninemanmorris.Board;
+import com.team8.backend.ninemanmorris.Phase;
 import com.team8.backend.ninemanmorris.Player;
 import com.team8.backend.ninemanmorris.PublicPosition;
 import com.team8.backend.ninemanmorris.Token;
@@ -35,11 +36,22 @@ public class PlaceMove extends Move {
                     } else {
                         position.setPlayerTwo();
                     }
-                    this.player.decrementStorageTokens();
-                    this.moveStatus = true;
+                    this.placeMoveHelper(position);
                 }
             }
         }
     }
 
+    /**
+     * Helper function for updating values based on the checks
+     * 
+     * @param position - PublicPosition of interest
+     */
+    private void placeMoveHelper(PublicPosition position) {
+        this.player.decrementStorageTokens();
+        this.moveStatus = true;
+        if (this.checkMillPosition(position)) {
+            this.player.setMovementPhase(Phase.REMOVE);
+        }
+    }
 }

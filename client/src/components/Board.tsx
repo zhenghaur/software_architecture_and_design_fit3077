@@ -18,6 +18,9 @@ const Phase = Object.freeze({
 })
 
 const Board = () => {
+    // End Game
+    const [gameOver, setGameOver] = useState(false)
+
     // Use state variables for determining the display and movement
     const [boardState, setBoardState] = useState<number[][]>([]);
     const [playerTurn, setPlayerTurn] = useState(1) // By default set to 1 unless changed
@@ -47,8 +50,12 @@ const Board = () => {
                             [0,0,3,1,1,0,0],
                             [0,2,0,3,0,2,0],
                             [2,0,0,1,0,0,1],]
-            // Attempts to populate board                          
-            const response = await fetch('http://localhost:9999/initfromid', {
+
+            // This is for the local hosted vs                             
+            const fetchLocation = 'http://localhost:9999/initfromid'
+            //const fetchLocation = 'http://170.64.176.243/initfromid'
+
+            const response = await fetch(fetchLocation, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -67,6 +74,7 @@ const Board = () => {
                 setPlayerTurn(Number(json.player) - 1)
                 console.log(Number(json.phase))
                 setPlayerPhase(Number(json.phase))
+                setGameOver(json.game_status)
             }
         } catch (error) {
         }
@@ -74,7 +82,11 @@ const Board = () => {
 
     const initialisePlayerStates = async() => {
         try {
-            const response = await fetch('http://localhost:9999/initplayerdata', {
+            // This is for the local hosted vs                             
+            const fetchLocation = 'http://localhost:9999/initplayerdata'
+            //const fetchLocation = 'http://170.64.176.243/initplayerdata'
+
+            const response = await fetch(fetchLocation, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -145,7 +157,11 @@ const Board = () => {
         console.log(movementPosition[1])
         let validMove = false
 
-        const response = await fetch('http://localhost:9999/makemove', {
+        // This is for the local hosted vs                             
+        const fetchLocation = 'http://localhost:9999/makemove'
+        //const fetchLocation = 'http://170.64.176.243/makemove'
+
+        const response = await fetch(fetchLocation, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -165,7 +181,8 @@ const Board = () => {
         } else {
             console.log("Error:", response.statusText);
         }
-        
+        initialiseStates()
+        initialisePlayerStates()
         return(validMove)
     }
 
@@ -186,7 +203,9 @@ const Board = () => {
                 }
             }
             else if (playerPhase == Phase.REMOVE) {
-                await handleMove([row, col], [0, 0])
+                if (!(await handleMove([row, col], [0, 0]))) {
+                    alertHelper("Invalid Removal")
+                }
             }
 
             // reinitialising
@@ -221,6 +240,16 @@ const Board = () => {
           })
     }
 
+    const gameOverHelper = () => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Oops...',
+            text: "Game is Over", 
+            timer: 1000,
+            timerProgressBar: true,
+          })
+    }
+
     useEffect(() => {
         initialiseStates()
         initialisePlayerStates()
@@ -228,7 +257,31 @@ const Board = () => {
 
     return (
     <section className="main-game">
-        <section className="section-board">
+        {gameOver ? 
+            <section className="section-board">
+            <article className="article-player-container">
+                <h2>Player {playerTurn == 1 ? "White": "Black"} Has Won</h2>
+            </article>
+            <article className="ariticle-board-container">
+                {boardState.map((row, rowIndex) => {
+                    return (<div key={rowIndex}>
+                        <div className="article-board" >{row.map((col, colIndex) => {
+                            return(
+                                <div 
+                                key={colIndex}
+                                onClick={() => gameOverHelper()}
+                                onDragStart={() => gameOverHelper()}
+                                >
+                                    <Tile tile={col}/>
+                                </div>
+                            )
+                        })}</div>
+                    </div>
+                    )
+                })}
+            </article>
+        </section> 
+        : <section className="section-board">
             <article className="article-player-container">
                 <h2>Player {playerTurn == 1 ? "White": "Black"}'s Turn to {playerPhase == 0 ? "Place": playerPhase == 1 ? "Move" : "Remove"}</h2>
             </article>
@@ -253,6 +306,7 @@ const Board = () => {
                 })}
             </article>
         </section>
+        }
         <PlayerData playerOneName={playerOneName} playerTwoName={playerTwoName} playerOneTokens={playerOneTokensLeft} playerTwoTokens={playerTwoTokensLeft} playerOneStorage={playerOneTokensStorage} playerTwoStorage={playerTwoTokensStorage} />
     </section>
   )

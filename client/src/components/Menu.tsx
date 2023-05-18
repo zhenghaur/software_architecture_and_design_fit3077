@@ -10,11 +10,15 @@ const Menu = (props: MenuProp) => {
     const [gameId, setGameId] = useState(0);
 
     const initialiseGame = async () => {
-        const response = await fetch('http://localhost:9999/initgame', {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
+        // This is for the local hosted vs                             
+        const fetchLocation = 'http://localhost:9999/initgame'
+        //const fetchLocation = 'http://170.64.176.243/initgame'
+
+        const response = await fetch(fetchLocation, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            },
         })
         const json = await response.json();
         setGameId(Number(json.game_id))

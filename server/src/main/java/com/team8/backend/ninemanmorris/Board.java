@@ -84,6 +84,9 @@ public class Board {
         // Checks North for neighbour
         for (int row = rowIndex - 1; row >= 0; row--) {
             Position northNeighbour = this.boardState[row][colIndex];
+            if (row == 3 & colIndex == 3) {
+                break;
+            }
             if (northNeighbour.getToken() != Token.EMPTY) {
                 neighbours.add(northNeighbour);
                 break;
@@ -93,6 +96,9 @@ public class Board {
         // Checks East for neighbour
         for (int col = colIndex + 1; col < this.boardState[0].length; col++) {
             Position eastNeighbour = this.boardState[rowIndex][col];
+            if (col == 3 & rowIndex == 3) {
+                break;
+            }
             if (eastNeighbour.getToken() != Token.EMPTY) {
                 neighbours.add(eastNeighbour);
                 break;
@@ -102,6 +108,9 @@ public class Board {
         // Checks South for neighbour
         for (int row = rowIndex + 1; row < this.boardState.length; row++) {
             Position southNeighbour = this.boardState[row][colIndex];
+            if (row == 3 & colIndex == 3) {
+                break;
+            }
             if (southNeighbour.getToken() != Token.EMPTY) {
                 neighbours.add(southNeighbour);
                 break;
@@ -111,6 +120,9 @@ public class Board {
         // Checks West for neighbour
         for (int col = colIndex - 1; col >= 0; col--) {
             Position westNeighbour = this.boardState[rowIndex][col];
+            if (col == 3 & rowIndex == 3) {
+                break;
+            }
             if (westNeighbour.getToken() != Token.EMPTY) {
                 neighbours.add(westNeighbour);
                 break;
