@@ -1,25 +1,36 @@
 package com.team8.backend.ninemanmorris.moves;
 
 import com.team8.backend.ninemanmorris.Board;
+import com.team8.backend.ninemanmorris.Phase;
 import com.team8.backend.ninemanmorris.Player;
 import com.team8.backend.ninemanmorris.PublicPosition;
+import com.team8.backend.ninemanmorris.Position;
 import com.team8.backend.ninemanmorris.Token;
 
 public class SlideMove extends Move {
 
+    /**
+     * Constructor for the slide move lcass
+     * @param fromRow
+     * @param fromCol
+     * @param toRow
+     * @param toCol
+     * @param player
+     * @param board
+     */
     public SlideMove(int fromRow, int fromCol, int toRow, int toCol, Player player, Board board) {
         super(fromRow, fromCol, toRow, toCol, player, board);
         // Calling the slide move function
         slideMove(fromRow, fromCol, toRow, toCol);
     }
 
-    private boolean slideMove(int fromRow, int fromCol, int toRow, int toCol) {
+    private void slideMove(int fromRow, int fromCol, int toRow, int toCol) {
 
         boolean isValid = true;
 
         // Verifying that positions exist
         if (!publicPositionExists(fromRow, fromCol) || !publicPositionExists(toRow, toCol)) {
-            return false;
+            isValid = false;
         }
 
         // Initializing fromPosition and toPosition
@@ -37,22 +48,49 @@ public class SlideMove extends Move {
 
         // Checking if the two positions are the same
         if (fromPosition == toPosition) {
-            return false;
+            isValid = false;
         }
 
         // Checking if token being moved belongs to currPlayer
-        if (fromPosition.getToken() != this.player.getPlayerToken()) {
-            return false;
+        else if (fromPosition.getToken() != this.player.getPlayerToken()) {
+            isValid = false;
         }
 
         // Check if the piece is a tile token
-        if (toPosition.getToken() != Token.TILE) {
-            return false;
+        else if (toPosition.getToken() != Token.TILE) {
+            isValid = false;
         }
 
-        // Loop through check if to is from's neighbour
+        // If the player has more than 3 tokens, check if move is to a neighbouring position
+        else if (this.player.getNumTokens() > 3) {
 
-        return isValid;
+            boolean isNeighbour = false;
+            // Loop through check if to is from's neighbour
+            for (Position neighbour : fromPosition.getNeighbours()) {
+                if (neighbour == toPosition) {
+                    isNeighbour = true;
+                    break;
+                }
+            }
+
+            // Set false if toPosition is not a neighbour of fromPosition
+            if (!isNeighbour) {
+                isValid = false;
+            }
+        }
+
+        // Check if valid to call slideMoveHelper
+        if (isValid) {
+            fromPosition.removePlayer();
+            if (player.getPlayerToken() == Token.PLAYER_1) {
+                toPosition.setPlayerOne();
+            } else {
+                toPosition.setPlayerTwo();
+            }
+
+            // Check if the added token makes a mill
+            slideMoveHelper(toPosition);
+        }
 
         // Add validation for move
         // Check if the from and to is the same = false
@@ -62,6 +100,18 @@ public class SlideMove extends Move {
         // isValid based on this
 
         // ceckong neighbours
+    }
+    
+    /***
+     * Slide Move Helper checking for mill and removing 
+     * 
+     * @param position
+     */
+    private void slideMoveHelper(PublicPosition position) {
+        this.moveStatus = true;
+        if (this.checkMillPosition(position)) {
+            this.player.setMovementPhase(Phase.REMOVE);
+        }
     }
 
     /**
