@@ -121,27 +121,41 @@ public class Game {
      * @return
      */
     public boolean slideMove(int fromRow, int fromCol, int toRow, int toCol) {
-        Boolean isValid = true;
+        Move newMove = new SlideMove(fromRow, fromCol, toRow, toCol, this.currPlayer, this.board);
+        Boolean isValid = newMove.getMoveStatus(); 
 
-        if (isValid) {
-            this.board.makeMoveSlide(fromRow, fromCol, toRow, toCol);
+        // Check if valid and ready to swap players
+        if (isValid & currPlayer.getMovementPhase() != Phase.REMOVE) {
+            swapPlayers();
 
-            /* TASK: TODO: */
-            // Can now add validation for after move - whther the player has a match 3
-            // Maybe swap players maybe not depending
-            // Maybe changing phase
-
-            // Check if the other player has any moves left
-            this.swapPlayers();
-
-            // Checker for the lack of valid moves left for player
+            // Check if opponent has run out of moves
             if (currPlayer.getMovementPhase() == Phase.MOVEMENT) {
-                // If there are no valid moves left
                 if (!checkValidMovesLeft()) {
+                    // Game ends
                     setGameEnd();
                 }
             }
         }
+        
+
+        // if (isValid) {
+        //     this.board.makeMoveSlide(fromRow, fromCol, toRow, toCol);
+
+        //     /* TASK: TODO: */
+        //     // Can now add validation for after move - whther the player has a match 3
+        //     // Maybe swap players maybe not depending
+
+        //     // Check if the other player has any moves left
+        //     this.swapPlayers();
+
+        //     // Checker for the lack of valid moves left for player
+        //     if (currPlayer.getMovementPhase() == Phase.MOVEMENT) {
+        //         // If there are no valid moves left
+        //         if (!checkValidMovesLeft()) {
+        //             setGameEnd();
+        //         }
+        //     }
+        // }
 
         return isValid;
     }
