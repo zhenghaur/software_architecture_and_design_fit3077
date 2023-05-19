@@ -34,7 +34,7 @@ public class WebController {
     @GetMapping(value = "/greeting")
     public String getGreeting() {
         System.out.println("hey");
-        return "Hello there!";
+        return "Hello there! Latest";
     }
 
     /**
