@@ -63,18 +63,14 @@ and <b>accessible at http://170.64.181.91/</b>
 <br>
 2) Placing and removing require a click at the location, and moving pieces require dragging and dropping.
 <br>
-3) You can revisit games by navigating to the respective game id in the url http://170.64.181.91/game/:id, their states are saved.
+3) You can revisit games by navigating to the respective game id in the url http://170.64.181.91/game/:id, their states are saved. Or via the same path localy hosted. 
 <br>
 4) Chat functionality has not been implemented yet, multiplayer has not been optimized yet.
 <br>
+5) endpoints for project are set to localhost currently but can be set to point to the digital ocean hosted backend at fetchLocation in Menu.tsx, Board.tsx
+<br>
 
-Currently, the board initially starts with 9 pieces, 5 white 4 black. <br>
-<img src="./client/public/first.PNG"><br>
-Making a move as the first player (default to white), swaps to second player <br>
-<img src="./client/public/second.PNG"><br>
-Making a move when not the turn, pings as invalid move and prevents <br>
-<img src="./client/public/third.PNG"><br>
-Lastly attempting to move to blank spaces or ontop of opposite color also pings as invalid<br>
+
 
 
 
