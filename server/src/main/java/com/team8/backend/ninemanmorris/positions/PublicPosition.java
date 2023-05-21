@@ -1,4 +1,4 @@
-package com.team8.backend.ninemanmorris;
+package com.team8.backend.ninemanmorris.positions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class PublicPosition implements Position {
     /***
      * Constructor for Public Position
      */
-    PublicPosition(int rowIndex, int colIndex) {
+    public PublicPosition(int rowIndex, int colIndex) {
         this.rowIndex = rowIndex;
         this.colIndex = colIndex;
     }

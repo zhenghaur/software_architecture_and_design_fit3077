@@ -2,6 +2,8 @@ package com.team8.backend.ninemanmorris;
 
 import com.team8.backend.ninemanmorris.enums.Token;
 import com.team8.backend.ninemanmorris.moves.Move;
+import com.team8.backend.ninemanmorris.positions.Position;
+import com.team8.backend.ninemanmorris.positions.PublicPosition;
 
 public class Main {
     public static void main(String[] args) {

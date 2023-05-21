@@ -3,6 +3,7 @@ package com.team8.backend.ninemanmorris;
 import java.util.ArrayList;
 
 import com.team8.backend.ninemanmorris.enums.Token;
+import com.team8.backend.ninemanmorris.positions.*;
 
 // Get at position
 public class Board {
