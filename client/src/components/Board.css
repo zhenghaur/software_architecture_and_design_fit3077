@@ -8,6 +8,12 @@
 
 .ariticle-board-container {
     border: 1px solid black;
+
+    background-image: url('../assets/nine-man-9.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-size: 85%;
 }
 
 .section-board {
