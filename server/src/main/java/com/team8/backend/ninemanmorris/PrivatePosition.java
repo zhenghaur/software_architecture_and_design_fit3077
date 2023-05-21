@@ -1,5 +1,7 @@
 package com.team8.backend.ninemanmorris;
 
+import com.team8.backend.ninemanmorris.enums.Token;
+
 /***
  * Position class that does not allow for pieces to be placed upon.
  */

@@ -1,5 +1,8 @@
 package com.team8.backend.ninemanmorris;
 
+import com.team8.backend.ninemanmorris.enums.Phase;
+import com.team8.backend.ninemanmorris.enums.Token;
+
 /**
  * Player Class
  */

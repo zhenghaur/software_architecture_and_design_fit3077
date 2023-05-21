@@ -1,5 +1,6 @@
 package com.team8.backend.ninemanmorris;
 
+import com.team8.backend.ninemanmorris.enums.Token;
 import com.team8.backend.ninemanmorris.moves.Move;
 
 public class Main {

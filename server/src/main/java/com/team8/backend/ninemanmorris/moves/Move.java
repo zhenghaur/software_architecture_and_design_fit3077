@@ -5,7 +5,7 @@ import com.team8.backend.ninemanmorris.Board;
 import com.team8.backend.ninemanmorris.Player;
 import com.team8.backend.ninemanmorris.Position;
 import com.team8.backend.ninemanmorris.PublicPosition;
-import com.team8.backend.ninemanmorris.Token;
+import com.team8.backend.ninemanmorris.enums.Token;
 
 /**
  * Class for modularising the Move function

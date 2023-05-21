@@ -1,11 +1,11 @@
 package com.team8.backend.ninemanmorris.moves;
 
 import com.team8.backend.ninemanmorris.Board;
-import com.team8.backend.ninemanmorris.Phase;
 import com.team8.backend.ninemanmorris.Player;
 import com.team8.backend.ninemanmorris.PublicPosition;
+import com.team8.backend.ninemanmorris.enums.Phase;
+import com.team8.backend.ninemanmorris.enums.Token;
 import com.team8.backend.ninemanmorris.Position;
-import com.team8.backend.ninemanmorris.Token;
 
 public class SlideMove extends Move {
 

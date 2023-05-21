@@ -3,6 +3,8 @@ package com.team8.backend.ninemanmorris;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.team8.backend.ninemanmorris.enums.Token;
+
 /***
  * Position class that allows for pieces to be placed upon.
  */

@@ -3,10 +3,10 @@ package com.team8.backend.ninemanmorris.moves;
 import java.util.ArrayList;
 
 import com.team8.backend.ninemanmorris.Board;
-import com.team8.backend.ninemanmorris.Phase;
 import com.team8.backend.ninemanmorris.Player;
 import com.team8.backend.ninemanmorris.PublicPosition;
-import com.team8.backend.ninemanmorris.Token;
+import com.team8.backend.ninemanmorris.enums.Phase;
+import com.team8.backend.ninemanmorris.enums.Token;
 
 public class RemoveMove extends Move {
 
