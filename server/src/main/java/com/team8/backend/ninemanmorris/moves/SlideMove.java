@@ -11,6 +11,7 @@ public class SlideMove extends Move {
 
     /**
      * Constructor for the slide move lcass
+     * 
      * @param fromRow
      * @param fromCol
      * @param toRow
@@ -61,7 +62,8 @@ public class SlideMove extends Move {
             isValid = false;
         }
 
-        // If the player has more than 3 tokens, check if move is to a neighbouring position
+        // If the player has more than 3 tokens, check if move is to a neighbouring
+        // position
         else if (this.player.getNumTokens() > 3) {
 
             boolean isNeighbour = false;
@@ -101,9 +103,9 @@ public class SlideMove extends Move {
 
         // ceckong neighbours
     }
-    
+
     /***
-     * Slide Move Helper checking for mill and removing 
+     * Slide Move Helper checking for mill and removing
      * 
      * @param position
      */

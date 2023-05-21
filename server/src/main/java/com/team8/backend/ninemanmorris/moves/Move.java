@@ -1,10 +1,7 @@
 package com.team8.backend.ninemanmorris.moves;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import com.team8.backend.ninemanmorris.Board;
-import com.team8.backend.ninemanmorris.Phase;
 import com.team8.backend.ninemanmorris.Player;
 import com.team8.backend.ninemanmorris.Position;
 import com.team8.backend.ninemanmorris.PublicPosition;
@@ -13,7 +10,7 @@ import com.team8.backend.ninemanmorris.Token;
 /**
  * Class for modularising the Move function
  */
-public class Move {
+public abstract class Move {
     // Failed by default
     protected boolean moveStatus = false;
     protected boolean gameStatus = false;
