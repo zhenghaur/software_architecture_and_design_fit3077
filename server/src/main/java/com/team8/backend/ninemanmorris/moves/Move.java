@@ -1,9 +1,10 @@
 package com.team8.backend.ninemanmorris.moves;
 
 import java.util.ArrayList;
-import com.team8.backend.ninemanmorris.Board;
-import com.team8.backend.ninemanmorris.Player;
+
 import com.team8.backend.ninemanmorris.enums.Token;
+import com.team8.backend.ninemanmorris.game.Board;
+import com.team8.backend.ninemanmorris.game.Player;
 import com.team8.backend.ninemanmorris.positions.Position;
 import com.team8.backend.ninemanmorris.positions.PublicPosition;
 

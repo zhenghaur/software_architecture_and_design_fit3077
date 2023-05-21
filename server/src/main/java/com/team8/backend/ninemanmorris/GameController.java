@@ -2,6 +2,9 @@ package com.team8.backend.ninemanmorris;
 
 import java.util.HashMap;
 
+import com.team8.backend.ninemanmorris.game.Board;
+import com.team8.backend.ninemanmorris.game.Game;
+
 public class GameController {
     /**
      * GameController for

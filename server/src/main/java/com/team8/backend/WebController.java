@@ -18,8 +18,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.team8.backend.ninemanmorris.Board;
 import com.team8.backend.ninemanmorris.GameController;
+import com.team8.backend.ninemanmorris.game.Board;
 
 @SuppressWarnings("unchecked")
 @CrossOrigin(origins = { "*" })

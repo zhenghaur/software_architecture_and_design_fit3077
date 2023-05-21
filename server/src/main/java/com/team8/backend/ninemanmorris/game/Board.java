@@ -1,4 +1,4 @@
-package com.team8.backend.ninemanmorris;
+package com.team8.backend.ninemanmorris.game;
 
 import java.util.ArrayList;
 
