@@ -1,4 +1,5 @@
 import "./PlayerData.css"
+import undo from "../assets/undo.png"
 
 interface PlayerData {
     playerOneName: string,
@@ -7,6 +8,7 @@ interface PlayerData {
     playerTwoTokens: string,
     playerOneStorage: string,
     playerTwoStorage: string,
+    undoClick: () => void,
 }
 
 const PlayerData = (props: PlayerData) => {
@@ -15,7 +17,7 @@ const PlayerData = (props: PlayerData) => {
             <section className="section-playerdata">
                 <article className="article-player">
                     <div className="grid-container">
-                        <div></div>
+                        <div className="undo-div" onClick={props.undoClick}>Undo<img className="undo" src={undo}></img></div>
                         <div className="grid-header div-center">White</div>
                         <div className="grid-header div-center">Black</div>
                         

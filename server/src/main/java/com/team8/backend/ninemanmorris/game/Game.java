@@ -1,5 +1,8 @@
 package com.team8.backend.ninemanmorris.game;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 import com.team8.backend.ninemanmorris.enums.Phase;
 import com.team8.backend.ninemanmorris.enums.Token;
 import com.team8.backend.ninemanmorris.moves.*;
@@ -13,6 +16,7 @@ public class Game {
 
     private Player currPlayer;
     private Boolean gameStatus = false;
+    private Stack<int[]> moveStack;
 
     /**
      * Constructor for game class
@@ -32,6 +36,7 @@ public class Game {
         this.playerOne = new Player("Player 1", Token.PLAYER_1);
         this.playerTwo = new Player("Player 2", Token.PLAYER_2);
         this.currPlayer = playerOne;
+        this.moveStack = new Stack<int[]>();
     }
 
     public Board getBoard() {
@@ -77,6 +82,12 @@ public class Game {
      */
     public boolean makeMove(int fromRow, int fromCol, int toRow, int toCol) {
         boolean moveStatus;
+
+        // { Player, Phase, fromRow, fromCol, toRow, toCol }
+        int[] moveData = { this.currPlayer.getPlayerToken().getToken(), this.currPlayer.getMovementPhase().getPhase(),
+                fromRow, fromCol, toRow, toCol };
+        this.moveStack.push(moveData);
+
         if (currPlayer.getMovementPhase() == Phase.PLACEMENT) {
             moveStatus = this.placeMove(fromRow, fromCol, toRow, toCol);
         } else if (currPlayer.getMovementPhase() == Phase.MOVEMENT) {
@@ -86,15 +97,85 @@ public class Game {
             moveStatus = removeMove(fromRow, fromCol, toRow, toCol);
         }
 
-        // if (currPlayer.getMovementPhase() == Phase.MOVEMENT) {
-        // // If there are no valid moves left
-        // if (!checkValidMovesLeft()) {
-        // setGameEnd();
-        // }
-        // }
+        // Check for invalid move
+        if (!moveStatus) {
+            this.moveStack.pop();
+        }
 
-        // Returning the boolean status of the move
         return moveStatus;
+    }
+
+    /** */
+    public boolean undoMove() {
+        boolean valid = false;
+
+        // Checks that the move stack is not empty
+        if (!this.moveStack.isEmpty()) {
+            // Obtaining the moveData
+            int[] moveData = moveStack.pop();
+            int playerToken = moveData[0];
+            int movementPhase = moveData[1];
+            int fromRow = moveData[2];
+            int fromCol = moveData[3];
+            int toRow = moveData[4];
+            int toCol = moveData[5];
+
+            ArrayList<PublicPosition> publicPositions = this.board.getPublicPositions();
+
+            // if move was a place we remove the piece currently at the position toRow,toCol
+            // add token to storage
+            if (movementPhase == Phase.PLACEMENT.getPhase()) {
+                for (PublicPosition position : publicPositions) {
+                    // gets the position to clear
+                    if (position.getRowIndex() == toRow & position.getColIndex() == toCol) {
+                        // Temporary then at the position
+                        Token tempToken = position.getToken();
+                        // Removes the token at the player
+                        position.removePlayer();
+
+                        // Sets the tempPlayer
+                        Player tempPlayer;
+                        // Obtains which player
+                        if (this.playerOne.getPlayerToken() == tempToken) {
+                            tempPlayer = this.playerOne;
+                        } else {
+                            tempPlayer = this.playerTwo;
+                        }
+
+                        // increments the players storage tokens
+                        tempPlayer.incrementStorageTokens();
+                    }
+                }
+            }
+            // if move was a move we move the toRow, toCol and
+            else if (movementPhase == Phase.MOVEMENT.getPhase()) {
+
+            }
+            // if move was a remove, we place the opponents piece at the fromRow, fromCol
+            // Add to the opponents num tokens
+            else if (movementPhase == Phase.REMOVE.getPhase()) {
+
+            }
+
+            // Setting valid
+            valid = true;
+            // Set valid currPlayer
+            if (playerToken == playerOne.getPlayerToken().getToken()) {
+                this.currPlayer = playerOne;
+            } else {
+                this.currPlayer = playerTwo;
+            }
+            // Set valid movePhase
+            if (movementPhase == Phase.PLACEMENT.getPhase()) {
+                this.currPlayer.setMovementPhase(Phase.PLACEMENT);
+            } else if (movementPhase == Phase.MOVEMENT.getPhase()) {
+                this.currPlayer.setMovementPhase(Phase.MOVEMENT);
+            } else {
+                this.currPlayer.setMovementPhase(Phase.REMOVE);
+            }
+        }
+
+        return valid;
     }
 
     /**

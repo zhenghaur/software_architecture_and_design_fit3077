@@ -75,6 +75,23 @@ public class WebController {
         return gameController.getGame(gameId).makeMove(original_row, original_col, movement_row, movement_col);
     }
 
+    @CrossOrigin
+    @PostMapping(value = "/undomove")
+    @ResponseBody
+    public boolean undoMove(@RequestBody String json)
+            throws JsonMappingException, JsonProcessingException {
+        // JSON parser
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, Integer> jsonObject = objectMapper.readValue(json,
+                new TypeReference<HashMap<String, Integer>>() {
+                });
+
+        int gameId = (int) jsonObject.get("game_id");
+
+        // Returns if the undoMove is successful
+        return gameController.getGame(gameId).undoMove();
+    }
+
     /***
      * For initialising and creating a game instance,
      * returns a json output of
