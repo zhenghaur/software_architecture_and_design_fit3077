@@ -83,6 +83,15 @@ public class Player {
     }
 
     /**
+     * Setter for the number of tokens a Player has
+     * 
+     * @return int number of tokens
+     */
+    public void setNumTokens(int newNumTokens) {
+        this.numTokens = newNumTokens;
+    }
+
+    /**
      * Decrementer for the number of storage tokens.
      */
     public void decrementStorageTokens() {
@@ -115,5 +124,14 @@ public class Player {
      */
     public int getNumStorageTokens() {
         return this.numStorageTokens;
+    }
+
+    /**
+     * Setter for Number of Storage Tokens
+     * 
+     * @return number of storage tokens
+     */
+    public void setNumStorageTokens(int newNumStorageTokens) {
+        this.numStorageTokens = newNumStorageTokens;
     }
 }
