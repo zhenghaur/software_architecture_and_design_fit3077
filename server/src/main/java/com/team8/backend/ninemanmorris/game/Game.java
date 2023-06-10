@@ -147,14 +147,44 @@ public class Game {
                     }
                 }
             }
-            // if move was a move we move the toRow, toCol and
+            // if move was a move we move the toRow, toCol to fromRow, fromCol
             else if (movementPhase == Phase.MOVEMENT.getPhase()) {
-
+                for (PublicPosition position : publicPositions) {
+                    // gets the position to move to
+                    if (position.getRowIndex() == fromRow & position.getColIndex() == fromCol) {
+                        // Add position
+                        if (playerToken == Token.PLAYER_1.getToken()) {
+                            position.setPlayerOne();
+                        } else {
+                            position.setPlayerTwo();
+                        }
+                    } else if (position.getRowIndex() == toRow & position.getColIndex() == toCol) {
+                        // Remove token
+                        position.removePlayer();
+                    }
+                }
             }
             // if move was a remove, we place the opponents piece at the fromRow, fromCol
             // Add to the opponents num tokens
             else if (movementPhase == Phase.REMOVE.getPhase()) {
+                for (PublicPosition position : publicPositions) {
+                    // gets the position to place
+                    if (position.getRowIndex() == fromRow & position.getColIndex() == fromCol) {
+                        // Store player
+                        Player tempPlayer;
+                        // Adds token
+                        if (playerToken == Token.PLAYER_1.getToken()) {
+                            position.setPlayerTwo();
+                            tempPlayer = playerTwo;
+                        } else {
+                            position.setPlayerOne();
+                            tempPlayer = playerOne;
+                        }
 
+                        // Updates tokens left data
+                        tempPlayer.incrementTokens();
+                    }
+                }
             }
 
             // Setting valid
@@ -174,6 +204,8 @@ public class Game {
                 this.currPlayer.setMovementPhase(Phase.REMOVE);
             }
         }
+
+        // Add code to undo game over state
 
         return valid;
     }
