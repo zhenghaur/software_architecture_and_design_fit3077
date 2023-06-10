@@ -109,7 +109,32 @@ public class Game {
      * 
      */
     public boolean setState(int playerOneTokesLeft, int playerTwoTokensLeft, int playerOneTokensStorage, int playerTwoTokensStorage, boolean gameOver, int playerTurn, int playerPhase, int[][] boardState){
-        
+        // set both players number of tokens left
+        this.playerOne.setNumTokens = playerOneTokensLeft;
+        this.playerTwo.setNumTokens = playerTwoTokensLeft;
+
+        // set both players number of tokens in storage
+        this.playerOne.setNumStorageTokens = playerOneTokensStorage;
+        this.playerTwo.setNumStorageTokens = playerTwoTokensStorage;
+
+        // set game state
+        this.gameStatus = gameOver;
+
+        // set player turn
+        this.currPlayer = (playerTurn == 1) ? this.playerOne : this.playerTwo;
+
+        // set player phase
+        if (playerPhase == 0){
+            this.currPlayer.setMovementPhase(Phase.PLACEMENT);
+        } else if (playerPhase == 1){
+            this.currPlayer.setMovementPhase(Phase.MOVEMENT);
+        } else {
+            this.currPlayer.setMovementPhase(Phase.REMOVE);
+        }
+
+        // set board state
+        this.board = new Board(boardState);
+
         return true;
     }
 
