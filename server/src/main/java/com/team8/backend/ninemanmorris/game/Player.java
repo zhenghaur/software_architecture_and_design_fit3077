@@ -102,6 +102,13 @@ public class Player {
     }
 
     /**
+     * Increments player's number of tokens
+     */
+    public void incrementTokens() {
+        this.numTokens += 1;
+    }
+
+    /**
      * Getter for Number of Storage Tokens
      * 
      * @return number of storage tokens
