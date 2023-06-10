@@ -105,7 +105,17 @@ public class Game {
         return moveStatus;
     }
 
-    /** */
+    /**
+     * 
+     */
+    public boolean setState(int playerOneTokesLeft, int playerTwoTokensLeft, int playerOneTokensStorage, int playerTwoTokensStorage, boolean gameOver, int playerTurn, int playerPhase, int[][] boardState){
+        
+        return true;
+    }
+
+    /**
+     * 
+     */
     public boolean undoMove() {
         boolean valid = false;
 
