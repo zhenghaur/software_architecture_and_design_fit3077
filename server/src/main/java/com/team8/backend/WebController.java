@@ -75,6 +75,68 @@ public class WebController {
         return gameController.getGame(gameId).makeMove(original_row, original_col, movement_row, movement_col);
     }
 
+    @PostMapping(value = "/uploadstate")
+    public boolean uploadstate(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
+        // JSON parser
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, String> jsonObject = objectMapper.readValue(json,
+                new TypeReference<HashMap<String, String>>() {
+                });
+
+        int gameId = Integer.parseInt(jsonObject.get("game_id"));
+        int playerOneTokensLeft = Integer.parseInt(jsonObject.get("player_one_token_left"));
+        int playerTwoTokensLeft = Integer.parseInt(jsonObject.get("player_two_token_left"));
+        int playerOneTokensStorage = Integer.parseInt(jsonObject.get("player_one_token_storage"));
+        int playerTwoTokensStorage = Integer.parseInt(jsonObject.get("player_two_token_storage"));
+        boolean gameOver = Boolean.parseBoolean(jsonObject.get("game_over"));
+        int playerTurn = Integer.parseInt(jsonObject.get("player_turn"));
+        int playerPhase = Integer.parseInt(jsonObject.get("player_phase"));
+        String boardStateString = jsonObject.get("board_state");
+
+        // Converting boardState
+        String[] rows = boardStateString.split("\\],\\[");
+
+        int rowCount = rows.length;
+        int columnCount = rows[0].split(",").length;
+
+        int[][] boardState = new int[rowCount][columnCount];
+
+        for (int i = 0; i < rowCount; i++) {
+            String[] elements = rows[i].replaceAll("\\[|\\]", "").split(",");
+            for (int j = 0; j < columnCount; j++) {
+                boardState[i][j] = Integer.parseInt(elements[j]);
+            }
+        }
+
+        System.out.println("Board State Array-----");
+        for (int[] row : boardState) {
+            for (int i : row) {
+                System.out.print(String.valueOf(i) + " ");
+            }
+            System.out.println(" ");
+        }
+        System.out.println("Board State Array-----");
+
+        System.out.println("Game ID: " + gameId);
+        System.out.println("Player One Tokens Left: " + playerOneTokensLeft);
+        System.out.println("Player Two Tokens Left: " + playerTwoTokensLeft);
+        System.out.println("Player One Tokens Storage: " + playerOneTokensStorage);
+        System.out.println("Player Two Tokens Storage: " + playerTwoTokensStorage);
+        System.out.println("Game Over: " + gameOver);
+        System.out.println("Player Turn: " + playerTurn);
+        System.out.println("Player Phase: " + playerPhase);
+
+        return true;
+    }
+
+    /***
+     * For undoing moves
+     * 
+     * @param json containing id of the game
+     * @return boolean value on if the undo was successful
+     * @throws JsonMappingException
+     * @throws JsonProcessingException
+     */
     @CrossOrigin
     @PostMapping(value = "/undomove")
     @ResponseBody
