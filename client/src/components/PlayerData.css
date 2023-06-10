@@ -40,3 +40,34 @@
 .div-center {
     text-align: center;
 }
+
+.undo-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.undo {
+    height: 1rem;
+}
+
+.undo-div {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .undo-div:hover {
+    background-color: #c0c0c0;
+  }
+  
+  .undo {
+    margin-left: 8px;
+  }

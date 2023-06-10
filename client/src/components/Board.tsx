@@ -250,6 +250,33 @@ const Board = () => {
           })
     }
 
+    const undoClick = async () => {
+        // This is for the local hosted vs                             
+        const fetchLocation = 'http://localhost:9999/undomove'
+        //const fetchLocation = 'http://170.64.176.243/undomove'
+
+        // Make the fetch 
+        const response = await fetch(fetchLocation, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "game_id": gameId
+            })
+        })
+
+        if (await response.json()) {
+            console.log("Undo")
+        }
+        else {
+            alertHelper("No moves to undo!")
+        }
+        
+        initialiseStates()
+        initialisePlayerStates()
+    }
+
     useEffect(() => {
         initialiseStates()
         initialisePlayerStates()
@@ -307,7 +334,7 @@ const Board = () => {
             </article>
         </section>
         }
-        <PlayerData playerOneName={playerOneName} playerTwoName={playerTwoName} playerOneTokens={playerOneTokensLeft} playerTwoTokens={playerTwoTokensLeft} playerOneStorage={playerOneTokensStorage} playerTwoStorage={playerTwoTokensStorage} />
+        <PlayerData undoClick={undoClick} playerOneName={playerOneName} playerTwoName={playerTwoName} playerOneTokens={playerOneTokensLeft} playerTwoTokens={playerTwoTokensLeft} playerOneStorage={playerOneTokensStorage} playerTwoStorage={playerTwoTokensStorage} />
     </section>
   )
 }
