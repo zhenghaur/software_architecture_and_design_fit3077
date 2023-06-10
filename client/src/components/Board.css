@@ -38,6 +38,43 @@
     
 }
 
+/* Board drop */
+
+.download-button {
+    margin-bottom: 10px;
+}
+
+.file-drop-area {
+    width: 300px;
+    height: 200px;
+    border: 2px dashed #ccc;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.file-drop-content {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+}
+
+.file-drop-area:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.file-drop-area:active {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.csv-article {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
 @media (max-width: 850px) {
     .main-game {
       flex-direction: column; 

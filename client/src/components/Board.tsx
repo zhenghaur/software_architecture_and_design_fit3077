@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
 import "./Board.css"
 import Tile from "./Tile"
-import { useParams } from "react-router-dom";
-import Swal from "sweetalert2";
-import PlayerData from "./PlayerData";
+import { useParams } from "react-router-dom"
+import Swal from "sweetalert2"
+import PlayerData from "./PlayerData"
 
 interface GameData {
     gameId: number,
@@ -22,22 +22,22 @@ const Board = () => {
     const [gameOver, setGameOver] = useState(false)
 
     // Use state variables for determining the display and movement
-    const [boardState, setBoardState] = useState<number[][]>([]);
+    const [boardState, setBoardState] = useState<number[][]>([])
     const [playerTurn, setPlayerTurn] = useState(1) // By default set to 1 unless changed
     const [playerPhase, setPlayerPhase] = useState(0)
 
     // Player state variables
-    const [playerOneName, setPlayerOneName] = useState("");
-    const [playerTwoName, setPlayerTwoName] = useState("");
-    const [playerOneTokensLeft, setPlayerOneTokensLeft] = useState("");
-    const [playerTwoTokensLeft, setPlayerTwoTokensLeft] = useState("");
-    const [playerOneTokensStorage, setPlayerOneTokensStorage] = useState("");
-    const [playerTwoTokensStorage, setPlayerTwoTokensStorage] = useState("");
+    const [playerOneName, setPlayerOneName] = useState("")
+    const [playerTwoName, setPlayerTwoName] = useState("")
+    const [playerOneTokensLeft, setPlayerOneTokensLeft] = useState("")
+    const [playerTwoTokensLeft, setPlayerTwoTokensLeft] = useState("")
+    const [playerOneTokensStorage, setPlayerOneTokensStorage] = useState("")
+    const [playerTwoTokensStorage, setPlayerTwoTokensStorage] = useState("")
 
     // Piece for movement
     const [selectedPiece, setSelectedPiece] = useState<{ row: number, col: number } | null>(null)
 
-    const { gameId } = useParams(); // This is for identification of the game 
+    const { gameId } = useParams() // This is for identification of the game 
     
     const initialiseStates = async () => {
         // Get Board from Backend
@@ -177,9 +177,9 @@ const Board = () => {
 
         console.log(response.ok)
         if (response.ok) {
-            validMove = await response.json();
+            validMove = await response.json()
         } else {
-            console.log("Error:", response.statusText);
+            console.log("Error:", response.statusText)
         }
         initialiseStates()
         initialisePlayerStates()
@@ -277,6 +277,91 @@ const Board = () => {
         initialisePlayerStates()
     }
 
+    const downloadCSV = () => {
+        const csvContent = "data:text/csvcharset=utf-8," +
+          "Player One Tokens Left,Player Two Tokens Left,Player One Tokens Storage,Player Two Tokens Storage,Game Over,Player Turn,Player Phase,Board State\n" +
+          `${playerOneTokensLeft},${playerTwoTokensLeft},${playerOneTokensStorage},${playerTwoTokensStorage},${gameOver ? 'Yes' : 'No'},${playerTurn},${playerPhase},"${JSON.stringify(boardState)}"\n`
+      
+        const encodedUri = encodeURI(csvContent)
+        const link = document.createElement("a")
+        link.setAttribute("href", encodedUri)
+        link.setAttribute("download", "gameData.csv")
+        document.body.appendChild(link)
+        link.click()
+    }
+
+    const handleFileDrop = async(event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault()
+        const file = event.dataTransfer.files[0]
+        const reader = new FileReader()
+        
+        if (file.type !== 'text/csv') {
+            console.log('Invalid file type. Please upload a CSV file.')
+            alertHelper('Invalid file type. Please upload a CSV file.')
+            return;
+        }
+
+        reader.onload = async (e) => {
+            if (e.target) {
+                const contents = e.target.result as string
+                const csvData = contents.split('\n').slice(1)
+                const extractedData = csvData.map((row) => row.split(','))
+                
+                const extractedPlayerOneTokensLeft = extractedData[0][0]
+                const extractedPlayerTwoTokensLeft = extractedData[0][1]
+                const extractedPlayerOneTokensStorage = extractedData[0][2]
+                const extractedPlayerTwoTokensStorage = extractedData[0][3]
+                const extractedGameOver = extractedData[0][4] === 'Yes'
+                const extractedPlayerTurn = parseInt(extractedData[0][5])
+                const extractedPlayerPhase = parseInt(extractedData[0][6])
+                const extractedBoardState = JSON.parse(extractedData[0].slice(7).join(','))
+        
+                console.log('Player One Tokens Left:', extractedPlayerOneTokensLeft)
+                console.log('Player Two Tokens Left:', extractedPlayerTwoTokensLeft)
+                console.log('Player One Tokens Storage:', extractedPlayerOneTokensStorage)
+                console.log('Player Two Tokens Storage:', extractedPlayerTwoTokensStorage)
+                console.log('Game Over:', extractedGameOver)
+                console.log('Player Turn:', extractedPlayerTurn)
+                console.log('Player Phase:', extractedPlayerPhase)
+                console.log('Board State:', extractedBoardState)
+
+                // Make the fetch
+                        // This is for the local hosted vs                             
+                const fetchLocation = 'http://localhost:9999/uploadstate'
+                //const fetchLocation = 'http://170.64.176.243/uploadstate'
+
+                // Make the fetch 
+                const response = await fetch(fetchLocation, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "game_id": gameId,
+                        "player_one_token_left": extractedPlayerOneTokensLeft,
+                        "player_two_token_left": extractedPlayerTwoTokensLeft,
+                        "player_one_token_storage": extractedPlayerOneTokensStorage,
+                        "player_two_token_storage": extractedPlayerTwoTokensStorage,
+                        "game_over": extractedGameOver,
+                        "player_turn": extractedPlayerTurn,
+                        "player_phase": extractedPlayerPhase,
+                        "board_state": extractedBoardState
+                    })
+                })
+                
+                // Reload the game
+                initialiseStates()
+                initialisePlayerStates()
+            }
+        }
+      
+        reader.readAsText(file)
+    }
+
+    function handleFileDragOver(event: React.DragEvent<HTMLDivElement>) {
+        event.preventDefault()
+    }
+      
     useEffect(() => {
         initialiseStates()
         initialisePlayerStates()
@@ -284,6 +369,18 @@ const Board = () => {
 
     return (
     <section className="main-game">
+        <article className="csv-article">
+            <button onClick={downloadCSV} className="download-button">Download CSV</button>
+            <div
+                className="file-drop-area"
+                onDrop={handleFileDrop}
+                onDragOver={handleFileDragOver}
+            >
+                <div className="file-drop-content">
+                Drag and drop a CSV file here to upload.
+                </div>
+            </div>
+        </article>
         {gameOver ? 
             <section className="section-board">
             <article className="article-player-container">
