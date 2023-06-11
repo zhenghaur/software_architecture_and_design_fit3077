@@ -279,11 +279,29 @@ const Board = () => {
 
     const downloadCSV = async() => {
 
-        // make the fetch
+        // This is for the local hosted vs                             
+        const fetchLocation = 'http://localhost:9999/getmovestack'
+        //const fetchLocation = 'http://170.64.176.243/getmovestack'
+
+        // Make the fetch 
+        const response = await fetch(fetchLocation, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "game_id": gameId
+            })
+        })
+
+        // obtains the json 
+        const json = await response.json()
+
+        const serializedStack = json.serialized_stack
 
         const csvContent = "data:text/csvcharset=utf-8," +
-          "Player One Tokens Left,Player Two Tokens Left,Player One Tokens Storage,Player Two Tokens Storage,Game Over,Player Turn,Player Phase,Board State\n" +
-          `${playerOneTokensLeft},${playerTwoTokensLeft},${playerOneTokensStorage},${playerTwoTokensStorage},${gameOver ? 'Yes' : 'No'},${playerTurn},${playerPhase},"${JSON.stringify(boardState)}"\n`
+          "Player One Tokens Left,Player Two Tokens Left,Player One Tokens Storage,Player Two Tokens Storage,Game Over,Player Turn,Player Phase, Serialized Stack, Board State\n" +
+          `${playerOneTokensLeft},${playerTwoTokensLeft},${playerOneTokensStorage},${playerTwoTokensStorage},${gameOver ? 'Yes' : 'No'},${playerTurn},${playerPhase},${serializedStack},"${JSON.stringify(boardState)}"\n`
       
         const encodedUri = encodeURI(csvContent)
         const link = document.createElement("a")
@@ -310,14 +328,25 @@ const Board = () => {
                 const csvData = contents.split('\n').slice(1)
                 const extractedData = csvData.map((row) => row.split(','))
                 
-                const extractedPlayerOneTokensLeft = extractedData[0][0]
-                const extractedPlayerTwoTokensLeft = extractedData[0][1]
-                const extractedPlayerOneTokensStorage = extractedData[0][2]
-                const extractedPlayerTwoTokensStorage = extractedData[0][3]
-                const extractedGameOver = extractedData[0][4] === 'Yes'
-                const extractedPlayerTurn = parseInt(extractedData[0][5])
-                const extractedPlayerPhase = parseInt(extractedData[0][6])
-                const extractedBoardState = JSON.parse(extractedData[0].slice(7).join(','))
+                const extractedPlayerOneTokensLeft = extractedData[0][0];
+                const extractedPlayerTwoTokensLeft = extractedData[0][1];
+                const extractedPlayerOneTokensStorage = extractedData[0][2];
+                const extractedPlayerTwoTokensStorage = extractedData[0][3];
+                const extractedGameOver = extractedData[0][4] === 'Yes';
+                const extractedPlayerTurn = parseInt(extractedData[0][5]);
+                const extractedPlayerPhase = parseInt(extractedData[0][6]);
+                const extractedSerializedStack = extractedData[0][7];
+                const extractedBoardState = JSON.parse(extractedData[0].slice(8).join(','));
+
+                // const extractedPlayerOneTokensLeft = extractedData[0][0]
+                // const extractedPlayerTwoTokensLeft = extractedData[0][1]
+                // const extractedPlayerOneTokensStorage = extractedData[0][2]
+                // const extractedPlayerTwoTokensStorage = extractedData[0][3]
+                // const extractedGameOver = extractedData[0][4] === 'Yes'
+                // const extractedPlayerTurn = parseInt(extractedData[0][5])
+                // const extractedPlayerPhase = parseInt(extractedData[0][6])
+                // const extractedBoardState = JSON.parse(extractedData[0].slice(7).join(','))
+                // const extractedSerializedStack =  extractedData[0][8]
         
                 console.log('Player One Tokens Left:', extractedPlayerOneTokensLeft)
                 console.log('Player Two Tokens Left:', extractedPlayerTwoTokensLeft)
@@ -325,8 +354,9 @@ const Board = () => {
                 console.log('Player Two Tokens Storage:', extractedPlayerTwoTokensStorage)
                 console.log('Game Over:', extractedGameOver)
                 console.log('Player Turn:', extractedPlayerTurn)
-                console.log('Player Phase:', extractedPlayerPhase)
-                console.log('Board State:', extractedBoardState)
+                console.log('Player Phase:', extractedPlayerPhase)            
+                console.log('Serialized Stack:', extractedSerializedStack)
+                console.log('Board State:', extractedBoardState)    
 
                 // Make the fetch
                         // This is for the local hosted vs                             
@@ -348,7 +378,8 @@ const Board = () => {
                         "game_over": extractedGameOver,
                         "player_turn": extractedPlayerTurn,
                         "player_phase": extractedPlayerPhase,
-                        "board_state": extractedBoardState
+                        "board_state": extractedBoardState,
+                        "serialized_stack": extractedSerializedStack
                     })
                 })
                 

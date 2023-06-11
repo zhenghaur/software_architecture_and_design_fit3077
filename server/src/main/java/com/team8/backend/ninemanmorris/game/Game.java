@@ -109,7 +109,8 @@ public class Game {
      * 
      */
     public boolean setState(int playerOneTokensLeft, int playerTwoTokensLeft, int playerOneTokensStorage,
-            int playerTwoTokensStorage, boolean gameOver, int playerTurn, int playerPhase, int[][] boardState) {
+            int playerTwoTokensStorage, boolean gameOver, int playerTurn, int playerPhase, int[][] boardState,
+            Stack myStack) {
         try {
             // set both players number of tokens left
             this.playerOne.setNumTokens(playerOneTokensLeft);
@@ -136,6 +137,9 @@ public class Game {
 
             // set board state
             this.board = new Board(boardState);
+
+            // set stack
+            this.moveStack = myStack;
         } catch (Exception e) {
             return false;
         }

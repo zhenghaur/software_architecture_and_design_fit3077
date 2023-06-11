@@ -1,10 +1,13 @@
 package com.team8.backend;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Console;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -130,6 +133,18 @@ public class WebController {
         int playerTurn = Integer.parseInt(jsonObject.get("player_turn"));
         int playerPhase = Integer.parseInt(jsonObject.get("player_phase"));
         String boardStateString = jsonObject.get("board_state");
+        String serealizedStackString = jsonObject.get("serialized_stack");
+
+        // Retrieve the serialized stack bytes from the response map
+        byte[] serializedBytes = Base64.getDecoder().decode(serealizedStackString);
+
+        // Deserialize the stack
+        Stack moveStack = null;
+        try (ObjectInputStream objectIn = new ObjectInputStream(new ByteArrayInputStream(serializedBytes))) {
+            moveStack = (Stack) objectIn.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         // Converting boardState
         String[] rows = boardStateString.split("\\],\\[");
@@ -163,9 +178,10 @@ public class WebController {
         System.out.println("Game Over: " + gameOver);
         System.out.println("Player Turn: " + playerTurn);
         System.out.println("Player Phase: " + playerPhase);
+        System.out.println("serealizedStack: " + serealizedStackString);
 
         return gameController.getGame(gameId).setState(playerOneTokensLeft, playerTwoTokensLeft, playerOneTokensStorage,
-                playerTwoTokensStorage, gameOver, playerTurn, playerPhase, boardState);
+                playerTwoTokensStorage, gameOver, playerTurn, playerPhase, boardState, moveStack);
     }
 
     /***
