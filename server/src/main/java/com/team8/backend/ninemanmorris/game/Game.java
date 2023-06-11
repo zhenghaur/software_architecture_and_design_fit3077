@@ -108,15 +108,16 @@ public class Game {
     /**
      * 
      */
-    public boolean setState(int playerOneTokesLeft, int playerTwoTokensLeft, int playerOneTokensStorage, int playerTwoTokensStorage, boolean gameOver, int playerTurn, int playerPhase, int[][] boardState){
+    public boolean setState(int playerOneTokensLeft, int playerTwoTokensLeft, int playerOneTokensStorage,
+            int playerTwoTokensStorage, boolean gameOver, int playerTurn, int playerPhase, int[][] boardState) {
         try {
             // set both players number of tokens left
-            this.playerOne.setNumTokens = playerOneTokensLeft;
-            this.playerTwo.setNumTokens = playerTwoTokensLeft;
+            this.playerOne.setNumTokens(playerOneTokensLeft);
+            this.playerTwo.setNumTokens(playerTwoTokensLeft);
 
             // set both players number of tokens in storage
-            this.playerOne.setNumStorageTokens = playerOneTokensStorage;
-            this.playerTwo.setNumStorageTokens = playerTwoTokensStorage;
+            this.playerOne.setNumStorageTokens(playerOneTokensStorage);
+            this.playerTwo.setNumStorageTokens(playerTwoTokensStorage);
 
             // set game state
             this.gameStatus = gameOver;
@@ -125,9 +126,9 @@ public class Game {
             this.currPlayer = (playerTurn == 1) ? this.playerOne : this.playerTwo;
 
             // set player phase
-            if (playerPhase == 0){
+            if (playerPhase == Phase.PLACEMENT.getPhase()) {
                 this.currPlayer.setMovementPhase(Phase.PLACEMENT);
-            } else if (playerPhase == 1){
+            } else if (playerPhase == Phase.MOVEMENT.getPhase()) {
                 this.currPlayer.setMovementPhase(Phase.MOVEMENT);
             } else {
                 this.currPlayer.setMovementPhase(Phase.REMOVE);
@@ -136,10 +137,19 @@ public class Game {
             // set board state
             this.board = new Board(boardState);
         } catch (Exception e) {
-            return false
+            return false;
         }
-        
+
         return true;
+    }
+
+    /**
+     * Getter for the moveStack
+     * 
+     * @return
+     */
+    public Stack getMoveStack() {
+        return this.moveStack;
     }
 
     /**

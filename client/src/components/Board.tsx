@@ -277,7 +277,10 @@ const Board = () => {
         initialisePlayerStates()
     }
 
-    const downloadCSV = () => {
+    const downloadCSV = async() => {
+
+        // make the fetch
+
         const csvContent = "data:text/csvcharset=utf-8," +
           "Player One Tokens Left,Player Two Tokens Left,Player One Tokens Storage,Player Two Tokens Storage,Game Over,Player Turn,Player Phase,Board State\n" +
           `${playerOneTokensLeft},${playerTwoTokensLeft},${playerOneTokensStorage},${playerTwoTokensStorage},${gameOver ? 'Yes' : 'No'},${playerTurn},${playerPhase},"${JSON.stringify(boardState)}"\n`
