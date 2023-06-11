@@ -106,7 +106,19 @@ public class Game {
     }
 
     /**
+     * Sets game state to uploaded file.
      * 
+     * @param playerOneTokensLeft - number of tokens player 1 has
+     * @param playerTwoTokensLeft - number of tokens player 2 has
+     * @param playerOneTokensStorage - number of tokens player 1 has in storage
+     * @param playerTwoTokensStorage - number of tokens player 2 has in storage
+     * @param gameOver - boolean representing if game is over
+     * @param playerTurn - current player
+     * @param playerPhase - movement phase
+     * @param boardState - state of the board
+     * @param myStack - movement stack
+     * 
+     * @return true if valid, false otherwise
      */
     public boolean setState(int playerOneTokensLeft, int playerTwoTokensLeft, int playerOneTokensStorage,
             int playerTwoTokensStorage, boolean gameOver, int playerTurn, int playerPhase, int[][] boardState,
@@ -157,7 +169,9 @@ public class Game {
     }
 
     /**
+     * This function handles undo move using the movement stack to reverse to the previous board state/undo latest move
      * 
+     * @return true for validity
      */
     public boolean undoMove() {
         boolean valid = false;
