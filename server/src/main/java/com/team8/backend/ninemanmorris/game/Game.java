@@ -256,9 +256,8 @@ public class Game {
             } else {
                 this.currPlayer.setMovementPhase(Phase.REMOVE);
             }
+            this.gameStatus = false;
         }
-
-        // Add code to undo game over state
 
         return valid;
     }
