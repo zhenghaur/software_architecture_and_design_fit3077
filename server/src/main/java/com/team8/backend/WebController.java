@@ -1,9 +1,13 @@
 package com.team8.backend;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Console;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -75,6 +79,40 @@ public class WebController {
         return gameController.getGame(gameId).makeMove(original_row, original_col, movement_row, movement_col);
     }
 
+    @PostMapping(value = "/getmovestack")
+    public ResponseEntity<Map<String, Object>> getMoveStack(@RequestBody String json)
+            throws JsonMappingException, JsonProcessingException {
+        // Output Json initialising
+        Map<String, Object> responseMap = new HashMap<>();
+
+        // JSON parser
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, String> jsonObject = objectMapper.readValue(json,
+                new TypeReference<HashMap<String, String>>() {
+                });
+
+        int gameId = Integer.parseInt(jsonObject.get("game_id"));
+
+        // Obtaining the move stack
+        Stack moveStack = gameController.getGame(gameId).getMoveStack();
+
+        // Serializing the move stack
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        try (ObjectOutputStream objectOut = new ObjectOutputStream(byteStream)) {
+            objectOut.writeObject(moveStack);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Get the serialized bytes
+        byte[] serializedBytes = byteStream.toByteArray();
+
+        // Put the serialized stack into the response map
+        responseMap.put("serialized_stack", serializedBytes);
+
+        return ResponseEntity.ok(responseMap);
+    }
+
     @PostMapping(value = "/uploadstate")
     public boolean uploadstate(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
         // JSON parser
@@ -126,7 +164,8 @@ public class WebController {
         System.out.println("Player Turn: " + playerTurn);
         System.out.println("Player Phase: " + playerPhase);
 
-        return true;
+        return gameController.getGame(gameId).setState(playerOneTokensLeft, playerTwoTokensLeft, playerOneTokensStorage,
+                playerTwoTokensStorage, gameOver, playerTurn, playerPhase, boardState);
     }
 
     /***
